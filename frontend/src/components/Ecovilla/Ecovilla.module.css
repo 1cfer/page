@@ -1,0 +1,63 @@
+.Background {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+.Section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.Wrapper {
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80dvw;
+    max-width: 90rem;
+    height: 50rem;
+    border-radius: 2rem;
+    position: relative;
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+.toggleDrawer {
+    position: absolute;
+    bottom: 0; 
+    right: 0;
+    margin: 2rem;
+    background-color: var(--color-principal);
+    color: var(--color-secundario);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    scale: 1.5;
+    z-index: 10;
+
+    &:hover {
+        background-color: var(--color-secundario);
+        color: black;
+        border: 1px solid var(--color-principal);
+    }
+}
+
+.Graph{
+    margin-right: 15rem;
+}

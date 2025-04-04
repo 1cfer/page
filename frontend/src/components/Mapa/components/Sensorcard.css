@@ -1,0 +1,123 @@
+.sensor-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 270px;
+    height: auto;
+    position: relative;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  
+  .sensor-status {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .status-badge {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    text-align: center;
+    width: 40px;
+    height: 10px;
+  }
+
+  .status-badge.activo {
+    background-color: green;
+    color: white;
+}
+
+.status-badge.dañado {
+    background-color: purple;
+    color: white;
+    width: 80px;
+}
+
+.status-badge.desactivado {
+    background-color: red;
+    color: white;
+    width: 80px;
+}
+
+  
+  .sensor-title {
+    color: #555;
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  .sensor-name {
+    color: black;
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  hr {
+    border: 0.5px solid #e0e0e0;
+    margin: 10px 0;
+  }
+  
+  .sensor-info {
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .info-row-sub {
+    font-weight: bold;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+
+  .info-row-id {
+    display: flex;
+    justify-content: left;
+  }
+
+  .sensor-id-tittle {
+    font-size: 0.8rem;
+    color: #000000;
+    text-align: left;
+  }
+  
+  .sensor-id {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: left;
+  }
+
+  .decorative-circles {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+  }
+  
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(128, 0, 128, 0.2); /* Color lila para los círculos */
+  }
+  
+  .circle.large {
+    width: 120px;
+    height: 120px;
+    bottom: -50px;
+    right: -60px;
+  }
+  
+  .circle.small {
+    width: 120px;
+    height: 120px;
+    bottom: -80px;
+    right: -10px;
+  }
+  

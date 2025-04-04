@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+//Componentes
+import Navbar from "./components/shared/Navbar/Navbar";
+import Mapa from "./components/Mapa/Mapa";
+import Home from "./components/Home/Home";
+import Admin from "./components/Admin/Admin";
+import Tresd from "./components/Tresd/Tresd";
+import Usuarios from "./components/Usuarios/Usuarios";
+import Login from "./components/Login/Login";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Ecovilla from "./components/Ecovilla/Ecovilla";
 
+
+function Main() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar />
+      <Routes>
+        <Route path="/" exact element={<Home />} />
+        <Route path="/mapa" exact element={<Mapa />} />
+        <Route path="/admin" exact element={<Admin />} />
+        <Route path="/tresd" exact element={<Tresd />} />
+        <Route path="/usuarios" exact element={<Usuarios />} />
+        <Route path="/login" exact element={<Login />} />
+        <Route path="/dashboard" exact element={<Dashboard />} />
+        <Route path="/ecovilla" exact element={<Ecovilla />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default Main;

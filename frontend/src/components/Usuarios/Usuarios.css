@@ -1,0 +1,169 @@
+.gestion {
+    margin-left: 60px;
+    /*box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);*/ 
+    border-radius: 10px;
+    max-width: 800px;
+    color: black;
+}
+
+.gestion h2 {
+    margin-top: 0;
+    padding: 20px;
+    color: var(--color-principal);
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    margin-left: -20px;
+    font-weight: 600;
+}
+
+.formulario form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: var(--color-secundario);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+.formulario form input[type="text"],
+.formulario form input[type="id"],
+.formulario form input[type="email"],
+.formulario form input[type="password"],
+.formulario form select {
+    padding: 12px;
+    border: 1px solid var(--color-principal);
+    border-radius: 5px;
+    font-size: 0.95em;
+    width: 100%;
+}
+
+.formulario form button {
+    padding: 12px 20px;
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.formulario form button:hover {
+    background-color: var(--color-secundario);
+    color: black;
+    border: 1px solid var(--color-principal);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table thead {
+    background-color: var(--color-principal);
+    color: white;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-secundario);
+    font-size: 0.95em;
+}
+
+th {
+    font-weight: 600;
+    color: white;
+    font-size: 1em;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+}
+
+.button {
+    cursor: pointer;
+    border: var(--color-principal);
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    width: 100px;
+    display: block;
+}
+
+.button.edit {
+    background-color: var(--color-principal);
+    color: white;
+    margin-bottom: 5px;
+}
+
+button.edit:hover {
+    background-color: var(--color-secundario);
+    color: black;
+    border: 1px solid var(--color-principal);
+}
+
+button.delete {
+    background-color: var(--color-principal);
+    color: white;
+}
+
+button.delete:hover {
+    background-color: var(--color-secundario);
+    color: black;
+    border: 1px solid var(--color-principal);
+}
+
+
+table tr:hover {
+    background-color: var(--color-secundario);
+}
+
+
+.change-password-form form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: var(--color-secundario);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+.change-password-form form input[type="text"],
+.change-password-form form input[type="id"],
+.change-password-form form input[type="email"],
+.change-password-form form input[type="password"],
+.change-password-form form select {
+    padding: 12px;
+    border: 1px solid var(--color-principal);
+    border-radius: 5px;
+    font-size: 0.95em;
+    width: 100%;
+}
+
+.change-password-form form button {
+    padding: 12px 20px;
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.change-password-form form button:hover {
+    background-color: var(--color-secundario);
+    color: black;
+    border: 1px solid var(--color-principal);
+}

@@ -1,0 +1,68 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+  
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #000;
+}
+  
+.container {
+  display: flex;
+  flex-direction: row;
+}
+  
+.imageContainer {
+  flex: 1;
+  padding-right: 16px;
+}
+  
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+  
+.detailsContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+  
+.details {
+  display: flex; 
+  align-items: center;
+}
+  
+.details > p {
+    margin-right: 8px; 
+}
+  
+.buttonPurple {
+    background-color: purple;
+    color: white;
+    text-transform: none;
+}
+
+.roundButtonsContainer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.roundButton {
+  width: 60px;
+  height: 60px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+  

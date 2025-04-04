@@ -1,0 +1,45 @@
+.modal-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-color: white;
+    box-shadow: 24px;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+ .close-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+  
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    margin-left: 8px;
+  }
+  
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+  
+  .form-item {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .mediciones-title {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+  
+  .add-button {
+    margin-top: 16px;
+    text-align: center;
+  }
+  
