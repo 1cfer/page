@@ -1,0 +1,11 @@
+services:
+  agevital_db:
+    image: postgres:17
+    container_name: agevital_postgres
+    # restart: always
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - ../../backend/repository/migrations:/docker-entrypoint-initdb.d
