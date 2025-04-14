@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
-//Componentes
+//Components
+import TopNavBar from "./components/shared/TopNavBar/TopNavBar";
 import Navbar from "./components/shared/Navbar/Navbar";
+import SideNavBar from "./components/shared/Navbar/SideNavBar";
 import Mapa from "./components/Mapa/Mapa";
 import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
@@ -13,9 +16,14 @@ import Ecovilla from "./components/Ecovilla/Ecovilla";
 
 
 function Main() {
+
+  const [openSideNavBar, setOpenSideNavBar] = useState(false);
+
   return (
     <>
-      <Navbar />
+      <TopNavBar setOpenSideNavBar={setOpenSideNavBar} />
+      {/* <Navbar /> */}
+      <SideNavBar openSideNavBar={openSideNavBar} setOpenSideNavBar={setOpenSideNavBar} />
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/mapa" exact element={<Mapa />} />
