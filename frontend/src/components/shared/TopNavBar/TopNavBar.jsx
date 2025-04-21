@@ -11,7 +11,6 @@ import Menu from '@mui/material/Menu';
 import Grid from '@mui/material/Grid2';
 
 import AgevitalLogo from "../../../assets/agevitalLogo.png";
-import AgevitalName from "../../../assets/agevitalName.png";
 
 export default function TopNavBar({setOpenSideNavBar}) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -59,8 +58,7 @@ export default function TopNavBar({setOpenSideNavBar}) {
             </Grid>
             <Grid size={4}></Grid>
             <Grid size={2}>
-                <img src={AgevitalLogo} width={"50px"}/>
-                <img src={AgevitalName} width={"100px"} sx={{ flexGrow: 1 }}/>
+                <img src={AgevitalLogo} width={"200px"}/>
             </Grid>
             <Grid size={4}></Grid>
             <Grid size={1}>

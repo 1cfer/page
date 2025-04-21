@@ -3,10 +3,11 @@ import './Home.css';
 import homeImage from './home1.png';
 import homeImage2 from './image2.png';
 import { NavLink } from 'react-router-dom';
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import AccessTimeFilledRoundedIcon from '@mui/icons-material/AccessTimeFilledRounded';
-
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid2';
 
 const Home = () => {
 
@@ -19,68 +20,56 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home-container">
-      {/* Sección 1 */}
-      <section className="section1">
-        <div className="section1-content">
-          <h1 className="title">Monitoreo Inteligente para un<br /> Envejecimiento Saludable</h1>
-          <p className="description">AgeVital+ utiliza tecnología IoT para monitorear<br /> tu salud física y mental en tiempo real.</p>
-          {/* Solo muestra el botón "Ingresar" si el usuario no está logueado */}
-          {!isAuthenticated && (
-            <NavLink to="/login">
-              <button className="enter-button">Ingresar</button>
-            </NavLink>
-          )}
-        </div>
-        <img src={homeImage} alt="Imagen principal" className="section1-image" />
-      </section>
-
-      {/* Sección 2 */}
-      <section className="section2">
-        <div className="benefits">
-          <h1 className="subtitle">Beneficios Clave</h1>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={1} className="main-container">
+        <Grid size={1}></Grid>
+        <Grid size={3}>
+          <h1 className="title">Monitoreo Inteligente para un Envejecimiento Saludable</h1>
+          <p className="text">AgeVital+ utiliza tecnología IoT para monitorear tu salud física y mental en tiempo real.</p>
+          <h1 className="title">Beneficios Clave</h1>
           <p className="text">AgeVital+ conecta sensores no invasivos en el hogar para recopilar datos sobre la salud física y el ambiente. Estos datos son analizados en tiempo real para detectar cualquier anomalía, permitiendo que los usuarios y cuidadores tomen decisiones informadas.</p>
-        </div>
-        <div className="icons-section">
+        </Grid>
+        <Grid size={1}></Grid>
+        <Grid size={6}>
+          <img src={homeImage} alt="Home image" className="home-image" />
+        </Grid>
+        <Grid size={1}></Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid size={1}></Grid>
+        <Grid size={10}>
+          <hr className="divider"/>
+        </Grid>
+        <Grid size={1}></Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid size={2}></Grid>
+        <Grid size={2}>
           <div className="icon-item">
-            <AccessTimeFilledRoundedIcon className="icon" />
-            <div className="icon-text">
-              <h3>Monitoreo en Tiempo Real</h3>
-              <p>Supervisión continua de tu salud.</p>
-            </div>
+            <AccessTimeOutlinedIcon className="icon" />
+            <h3>Monitoreo en Tiempo Real</h3>
+            <p>Supervisión continua de tu salud.</p>
           </div>
+        </Grid>
+        <Grid size={1}></Grid>
+        <Grid size={2}>
           <div className="icon-item">
-            <FavoriteRoundedIcon className="icon" />
-            <div className="icon-text">
-              <h3>Detección Temprana</h3>
-              <p>Identificación de riesgos cardiovasculares.</p>
-            </div>
+            <FavoriteBorderOutlinedIcon className="icon" />
+            <h3>Detección Temprana</h3>
+            <p>Identificación de riesgos cardiovasculares.</p>
           </div>
+        </Grid>
+        <Grid size={1}></Grid>
+        <Grid size={2}>
           <div className="icon-item">
-            <StarRoundedIcon className="icon" />
-            <div className="icon-text">
-              <h3>Fácil de Usar</h3>
-              <p>Accesible para personas mayores y cuidadores.</p>
-            </div>
+            <StarOutlineOutlinedIcon className="icon" />
+            <h3>Fácil de Usar</h3>
+            <p>Accesible para personas mayores y cuidadores.</p>
           </div>
-        </div>
-      </section>
-
-      {/* Sección de imágenes */}
-      <section className="images-section">
-        <img src={homeImage2} alt="Imagen ilustrativa" />
-      </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2024 AgeVital+</p>
-        <nav>
-          <a href="#terms">Terms of Service</a>
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#cookies">Cookies</a>
-        </nav>
-      </footer>
-    </div>
+        </Grid>
+        <Grid size={2}></Grid>
+      </Grid>
+    </Box>
   );
 };
 
