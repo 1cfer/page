@@ -8,7 +8,7 @@ import SideNavBar from "./components/shared/Navbar/SideNavBar";
 import Mapa from "./components/Mapa/Mapa";
 import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
-import Tresd from "./components/Tresd/Tresd";
+import ThreeD from "./components/ThreeD/ThreeD";
 import Usuarios from "./components/Usuarios/Usuarios";
 import Login from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -28,7 +28,7 @@ function Main() {
         <Route path="/" exact element={<Home />} />
         <Route path="/mapa" exact element={<Mapa />} />
         <Route path="/admin" exact element={<Admin />} />
-        <Route path="/tresd" exact element={<Tresd />} />
+        <Route path="/threed" exact element={<ThreeD />} />
         <Route path="/usuarios" exact element={<Usuarios />} />
         <Route path="/login" exact element={<Login />} />
         <Route path="/dashboard" exact element={<Dashboard />} />

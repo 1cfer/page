@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css';
 import homeImage from './home1.png';
-import homeImage2 from './image2.png';
-import { NavLink } from 'react-router-dom';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';

@@ -55,7 +55,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
           </ListItemButton>
         </ListItem>
         <ListItem key="3D" disablePadding>
-          <ListItemButton onClick={() => navigate("/tresd")}>
+          <ListItemButton onClick={() => navigate("/threed")}>
             <ListItemIcon>
               <ViewInArRoundedIcon />
             </ListItemIcon>
