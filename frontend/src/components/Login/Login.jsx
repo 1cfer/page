@@ -6,7 +6,7 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { jwtDecode } from "jwt-decode";
 import Swal from 'sweetalert2';  // Importar SweetAlert2
 
-function Login() {
+function Login({setShowLoginButton}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -40,7 +40,10 @@ function Login() {
 
   return (
     <div className="login-container">
-      <button className="back-button" onClick={() => navigate('/')}>
+      <button className="back-button" onClick={() => {
+        navigate('/');
+        setShowLoginButton(true);
+      }}>
         <ExitToAppRoundedIcon />
       </button>
       <div className="login-form">

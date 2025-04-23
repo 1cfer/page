@@ -1,0 +1,37 @@
+.modal {
+    display: flex;
+    margin-top: 25%;
+    margin-left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: white;
+    border: '2px solid #000';
+    box-shadow: 24;
+    padding: 2%;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.buttonRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.acceptButton {
+    margin-right: 3%;
+    padding: 3%;
+}
+
+.userRole {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

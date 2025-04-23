@@ -10,9 +10,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-// Styles
-import styles from '../Navbar/Navbar.module.css';
-
 // Icons
 import HomeIcon from '@mui/icons-material/Home';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';

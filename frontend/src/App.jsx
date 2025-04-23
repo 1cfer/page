@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 
 //Components
 import TopNavBar from "./components/shared/TopNavBar/TopNavBar";
-import Navbar from "./components/shared/Navbar/Navbar";
 import SideNavBar from "./components/shared/Navbar/SideNavBar";
 import Mapa from "./components/Mapa/Mapa";
 import Home from "./components/Home/Home";
@@ -18,11 +17,11 @@ import Ecovilla from "./components/Ecovilla/Ecovilla";
 function Main() {
 
   const [openSideNavBar, setOpenSideNavBar] = useState(false);
+  const [showLoginButton, setShowLoginButton] = useState(true);
 
   return (
     <>
-      <TopNavBar setOpenSideNavBar={setOpenSideNavBar} />
-      {/* <Navbar /> */}
+      <TopNavBar setOpenSideNavBar={setOpenSideNavBar} showLoginButton={showLoginButton} setShowLoginButton={setShowLoginButton} />
       <SideNavBar openSideNavBar={openSideNavBar} setOpenSideNavBar={setOpenSideNavBar} />
       <Routes>
         <Route path="/" exact element={<Home />} />
@@ -30,7 +29,7 @@ function Main() {
         <Route path="/admin" exact element={<Admin />} />
         <Route path="/threed" exact element={<ThreeD />} />
         <Route path="/usuarios" exact element={<Usuarios />} />
-        <Route path="/login" exact element={<Login />} />
+        <Route path="/login" exact element={<Login setShowLoginButton={setShowLoginButton}/>} />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/ecovilla" exact element={<Ecovilla />} />
       </Routes>
