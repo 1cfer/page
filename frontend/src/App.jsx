@@ -7,6 +7,7 @@ import SideNavBar from "./components/shared/Navbar/SideNavBar";
 import Mapa from "./components/Mapa/Mapa";
 import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
+import Admin2 from "./components/Admin/Admin2";
 import ThreeD from "./components/ThreeD/ThreeD";
 import Usuarios from "./components/Usuarios/Usuarios";
 import Login from "./components/Login/Login";
@@ -26,7 +27,7 @@ function Main() {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/mapa" exact element={<Mapa />} />
-        <Route path="/admin" exact element={<Admin />} />
+        <Route path="/admin" exact element={<Admin2 />} />
         <Route path="/threed" exact element={<ThreeD />} />
         <Route path="/usuarios" exact element={<Usuarios />} />
         <Route path="/login" exact element={<Login setShowLoginButton={setShowLoginButton}/>} />

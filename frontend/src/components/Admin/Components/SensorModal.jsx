@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button, Box, TextField, Select, MenuItem, IconButton, Tooltip } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid2';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './SensorModal.module.css';
-import { NavLink } from 'react-router-dom';
 import { updateSensor, deleteSensor } from '../../../services/getSensorData'; 
 
-const SensorModal = ({ open, handleClose, nombreId, id_sensor, ubicacion, estado, imagenurl, handleUpdate,handleDelete }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedNombre, setEditedNombre] = useState(nombreId); // Estado para el nombre
-  const [editedUbicacion, setEditedUbicacion] = useState(ubicacion);
-  const [editedEstado, setEditedEstado] = useState(estado);
+const SensorModal = ({ open, handleClose, selectedSensor }) => {
+
+  const [sensorName, setSensorName] = useState(selectedSensor.nombre);
+  const [sensorLatitude, setSensorLatitude] = useState(selectedSensor.latitud);
+  const [sensorLongitude, setSensorLongitude] = useState(selectedSensor.longitud);
+  const [sensorState, setSensorState] = useState(selectedSensor.estado);
 
   const handleSave = async () => {
-    if (!editedUbicacion || !editedEstado) {
+    if (!editedUbicacion || !sensorState) {
       alert("Por favor, completa todos los campos");
       return;
     }
@@ -23,138 +32,89 @@ const SensorModal = ({ open, handleClose, nombreId, id_sensor, ubicacion, estado
         alert('Ubicación inválida. Asegúrate de que esté en el formato correcto (latitud,longitud)');
         return;
       }
-      const updatedSensor = await updateSensor(editedNombre,id_sensor, latitud, longitud, editedEstado, imagenurl);
+      const updatedSensor = await updateSensor(sensorName,id_sensor, sensorLatitude, sensorLongitude, sensorState, imagenurl);
       handleUpdate(updatedSensor);  
       handleClose();
     } catch (error) {
       console.error("Error al guardar el sensor:", error);
     }
   };
-  
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    setEditedNombre(nombreId);
-    setEditedUbicacion(ubicacion);
-    setEditedEstado(estado);
-  };
-
-  const handleDeleteClick = async () => {
-    if (estado === 'activo') {
-      alert('No se puede eliminar un sensor activo');
-    } else {
-      try {
-        await deleteSensor(id_sensor);
-        handleDelete(id_sensor); 
-        handleClose(); 
-      } catch (error) {
-        console.error("Error al eliminar el sensor:", error);
-        alert("Hubo un error al intentar eliminar el sensor.");
-      }
-    }
-  };
+  useEffect(() => {
+    setSensorName(selectedSensor.nombre)
+    setSensorLatitude(selectedSensor.latitud)
+    setSensorLongitude(selectedSensor.longitud)
+    setSensorState(selectedSensor.estado)
+  }, [selectedSensor])
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <Box className={styles.header}>
-        <DialogTitle>Detalles del Sensor</DialogTitle>
-        <IconButton className={styles.closeButton} onClick={handleClose}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
+    <Dialog open={open} onClose={handleClose} sx={{borderRadius: '30px'}}>
+      <Box sx={{ flexGrow: 1, borderRadius: '30px' }}>
+        <Grid container spacing={1}>
+          <Grid size={11}></Grid>
+          <Grid size={1}>
+            <IconButton className={styles.closeButton} onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Grid>
+          <Grid size={12}>
+            <DialogTitle>Editar Sensor</DialogTitle>
+          </Grid>
 
-      <DialogContent>
-        <Box className={styles.container}>
-          <Box className={styles.imageContainer}>
-            <img src={imagenurl} alt={nombreId} className={styles.image} />
-          </Box>
-
-          <Box className={styles.detailsContainer}>
-            <Typography variant="h6">{isEditing ? (
-              <TextField
-                value={editedNombre}
-                onChange={(e) => setEditedNombre(e.target.value)}
+          <Grid container sx={{padding: '0% 4% 4% 4%'}}>
+            <Grid size={12}>
+              <Typography variant="body2">Nombre:</Typography>
+              <TextField 
+                value={sensorName}
+                onChange={(e) => setSensorName(e.target.value)}
                 fullWidth
               />
-            ) : (
-              nombreId
-            )}</Typography>
-
-            <Box className={styles.details}>
-              <Typography variant="body2">Ubicación:</Typography>
-              {isEditing ? (
-                <TextField 
-                  value={editedUbicacion} 
-                  onChange={(e) => setEditedUbicacion(e.target.value)} 
-                  fullWidth 
-                />
-              ) : (
-                <Typography>{ubicacion}</Typography>
-              )}
-            </Box>
-
-            <Box className={styles.details}>
-              <Typography variant="body2">Estado:</Typography>
-              {isEditing ? (
-                <Select
-                  value={editedEstado}
-                  onChange={(e) => setEditedEstado(e.target.value)}
-                  fullWidth
-                >
-                  <MenuItem value="activo">Activo</MenuItem>
-                  <MenuItem value="inactivo">Inactivo</MenuItem>
-                  <MenuItem value="dañado">Dañado</MenuItem>
-                </Select>
-              ) : (
-                <Typography>{estado}</Typography>
-              )}
-            </Box>
-            <Box className={styles.roundButtonsContainer}>
-        <NavLink to={'/mapa'}>
-          <Tooltip title="Visualizar mapa" arrow>
-            <IconButton 
-              className={styles.roundButton} 
-              style={{ backgroundImage: `url('https://png.pngtree.com/png-clipart/20230916/original/pngtree-google-map-map-application-vector-png-image_12256712.png')` }}
-            />
-          </Tooltip>
-        </NavLink>
-          <NavLink to={'/mapa'}>
-            <Tooltip title="Visualizar Ecovilla 3D" arrow placement="bottom">
-              <IconButton  
-                className={styles.roundButton} 
-                style={{ backgroundImage: `url('https://cdn-icons-png.flaticon.com/512/751/751438.png')` }}
+            </Grid>
+            <Grid size={5}>
+              <Typography variant="body2">Latitud:</Typography>
+              <TextField 
+                value={sensorLatitude} 
+                onChange={(e) => setSensorLatitude(e.target.value)} 
+                fullWidth 
               />
-            </Tooltip>
-        </NavLink>
-        </Box>
-          </Box>
-        </Box>
-      </DialogContent>
+            </Grid>
+            <Grid size={2}></Grid>
+            <Grid size={5}>
+              <Typography variant="body2">Longitud:</Typography>
+              <TextField 
+                value={sensorLongitude} 
+                onChange={(e) => setSensorLongitude(e.target.value)} 
+                fullWidth 
+              />
+            </Grid>
+            <Grid size={12}>
+              <Typography variant="body2">Estado:</Typography>
+              <Select
+                value={sensorState}
+                onChange={(e) => setSensorState(e.target.value)}
+                fullWidth
+              >
+                <MenuItem value="activo">Activo</MenuItem>
+                <MenuItem value="inactivo">Inactivo</MenuItem>
+                <MenuItem value="dañado">Dañado</MenuItem>
+              </Select>
+            </Grid>
+          </Grid>
 
-      <DialogActions>
-        {isEditing ? (
-          <>
-            <Button onClick={handleCancel} className={styles.buttonPurple}>
+          <Grid size={4}></Grid>
+          <Grid size={2}>
+            <Button onClick={handleSave} sx={{marginBottom: '20%', backgroundColor: '#3FC244', color: 'white', padding: '10%'}}>
+              Editar
+            </Button>
+          </Grid>
+          <Grid size={2}>
+            <Button onClick={handleClose} sx={{backgroundColor: '#EBEBEB', color: 'black', padding: '10%'}}>
               Cancelar
             </Button>
-            <Button onClick={handleSave} className={styles.buttonPurple}>
-              Guardar
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button onClick={() => setIsEditing(true)} className={styles.buttonPurple}>
-              Modificar
-            </Button>
-            <Button  onClick={handleDeleteClick} className={styles.buttonPurple}>
-              Eliminar
-            </Button>
-          </>
-          
-        )}
-        
-      </DialogActions>
-        
+          </Grid>
+          <Grid size={4}></Grid>
+        </Grid>
+      </Box>
     </Dialog>
   );
 };

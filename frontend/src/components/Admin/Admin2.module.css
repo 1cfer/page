@@ -1,0 +1,21 @@
+.circle {
+        margin-right: 5%;
+}
+
+.activo {
+        color: green;
+}
+
+.inactivo {
+        color: red;
+}
+
+.dañado {
+        color: purple;
+}
+
+.rowState {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
