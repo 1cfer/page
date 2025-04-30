@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -18,8 +19,7 @@ import ViewInArRoundedIcon from '@mui/icons-material/ViewInArRounded';
 import SensorOccupiedRoundedIcon from '@mui/icons-material/SensorOccupiedRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 
-export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
-
+export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
   const navigate = useNavigate();
 
   const DrawerList = (
@@ -28,7 +28,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
       <Divider />
       <List>
         <ListItem key="Home" disablePadding>
-          <ListItemButton onClick={() => navigate("/")}>
+          <ListItemButton onClick={() => navigate('/')}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -36,7 +36,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
           </ListItemButton>
         </ListItem>
         <ListItem key="Sensors" disablePadding>
-          <ListItemButton onClick={() => navigate("/admin")}>
+          <ListItemButton onClick={() => navigate('/admin')}>
             <ListItemIcon>
               <QueryStatsIcon />
             </ListItemIcon>
@@ -44,7 +44,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
           </ListItemButton>
         </ListItem>
         <ListItem key="Location" disablePadding>
-          <ListItemButton onClick={() => navigate("/mapa")}>
+          <ListItemButton onClick={() => navigate('/mapa')}>
             <ListItemIcon>
               <PlaceIcon />
             </ListItemIcon>
@@ -52,7 +52,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
           </ListItemButton>
         </ListItem>
         <ListItem key="3D" disablePadding>
-          <ListItemButton onClick={() => navigate("/threed")}>
+          <ListItemButton onClick={() => navigate('/threed')}>
             <ListItemIcon>
               <ViewInArRoundedIcon />
             </ListItemIcon>
@@ -60,7 +60,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
           </ListItemButton>
         </ListItem>
         <ListItem key="Users" disablePadding>
-          <ListItemButton onClick={() => navigate("/usuarios")}>
+          <ListItemButton onClick={() => navigate('/usuarios')}>
             <ListItemIcon>
               <SensorOccupiedRoundedIcon />
             </ListItemIcon>
@@ -68,7 +68,7 @@ export default function SideNavBar({openSideNavBar, setOpenSideNavBar}) {
           </ListItemButton>
         </ListItem>
         <ListItem key="Dashboard" disablePadding>
-          <ListItemButton onClick={() => navigate("/dashboard")}>
+          <ListItemButton onClick={() => navigate('/dashboard')}>
             <ListItemIcon>
               <DashboardRoundedIcon />
             </ListItemIcon>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import SensorMeasurement from './Components/SensorMeasurement';
-import SensorModal from './Components/SensorModal';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import SensorMeasurement from './Components/SensorMeasurement';
+import SensorModal from './Components/SensorModal';
 import AddSensorModal from './Components/AddSensorModal';
 
 import { getSensorData } from '../../services/getSensorData';
@@ -22,25 +22,28 @@ function Admin() {
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/api/tipos_medicion')
-      .then(response => response.json())
-      .then(data => setTiposMedicion(data))
-      .catch(error => console.error('Error al obtener tipos de medición:', error));
+      .then((response) => response.json())
+      .then((data) => setTiposMedicion(data))
+      .catch((error) => console.error('Error al obtener tipos de medición:', error));
   }, []);
 
   const fetchData = () => {
     getSensorData()
-      .then(data => {
+      .then((data) => {
         const sensorTypeToStateSetter = {
-          'temperatura': setTemperatureCards,
-          'humedadrelativa': setHumidityCards,
-          'ruido': setNoiseCards,
-          'calidadaire': setAirQualityCards,
+          temperatura: setTemperatureCards,
+          humedadrelativa: setHumidityCards,
+          ruido: setNoiseCards,
+          calidadaire: setAirQualityCards,
         };
 
         Object.entries(sensorTypeToStateSetter).forEach(([sensorType, setState]) => {
           const cards = data
-            .filter(sensor => sensor.tipo === sensorType || sensor.tipo.toLowerCase() === sensorType.toLowerCase())
-            .map(sensor => ({
+            .filter(
+              (sensor) =>
+                sensor.tipo === sensorType || sensor.tipo.toLowerCase() === sensorType.toLowerCase()
+            )
+            .map((sensor) => ({
               nombreId: sensor.nombre,
               id_sensor: sensor.id_sensor,
               ubicacion: `(${sensor.latitud}, ${sensor.longitud})`,
@@ -50,7 +53,7 @@ function Admin() {
           setState(cards);
         });
       })
-      .catch(error => console.error('Error al obtener los datos:', error));
+      .catch((error) => console.error('Error al obtener los datos:', error));
   };
 
   useEffect(() => {
@@ -75,9 +78,7 @@ function Admin() {
 
   const handleUpdateSensor = (updatedSensor) => {
     const updateCards = (cards) =>
-      cards.map((card) =>
-        card.nombreId === updatedSensor.nombreId ? updatedSensor : card
-      );
+      cards.map((card) => (card.nombreId === updatedSensor.nombreId ? updatedSensor : card));
 
     setTemperatureCards((prevCards) => updateCards(prevCards));
     setHumidityCards((prevCards) => updateCards(prevCards));
@@ -100,12 +101,12 @@ function Admin() {
 
   const handleAddSensor = (newSensor) => {
     const tiposMedicionSeleccionados = Object.keys(newSensor.mediciones)
-      .filter(tipo => newSensor.mediciones[tipo])
-      .map(tipo => {
-        const tipoMedicion = tiposMedicion.find(tm => tm.nombre_tipo === tipo);
+      .filter((tipo) => newSensor.mediciones[tipo])
+      .map((tipo) => {
+        const tipoMedicion = tiposMedicion.find((tm) => tm.nombre_tipo === tipo);
         return tipoMedicion ? tipoMedicion.id_tipo_medicion : null;
       })
-      .filter(id_tipo_medicion => id_tipo_medicion !== null);
+      .filter((idTipoMedicion) => idTipoMedicion !== null);
 
     const nuevoSensor = {
       nombre: newSensor.nombre,
@@ -121,10 +122,10 @@ function Admin() {
       method: 'OPTIONS',
       headers: {
         'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'Content-Type'
-      }
+        'Access-Control-Request-Headers': 'Content-Type',
+      },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -132,27 +133,27 @@ function Admin() {
         return fetch('http://127.0.0.1:5000/api/sensores', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify(nuevoSensor)
+          body: JSON.stringify(nuevoSensor),
         });
       })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         if (data.error) {
-          console.error("Error al crear el sensor:", data.error);
+          console.error('Error al crear el sensor:', data.error);
         } else {
-          console.log("Sensor creado exitosamente:", data);
+          console.log('Sensor creado exitosamente:', data);
           fetchData(); // Actualiza los datos
           handleCloseAddModal();
         }
       })
-      .catch(error => console.error("Error en la solicitud:", error));
+      .catch((error) => console.error('Error en la solicitud:', error));
   };
 
   return (
@@ -168,11 +169,7 @@ function Admin() {
         cardsData={humidityCards}
         handleOpenModal={handleOpenModal}
       />
-      <SensorMeasurement
-        titulo="ruido"
-        cardsData={noiseCards}
-        handleOpenModal={handleOpenModal}
-      />
+      <SensorMeasurement titulo="ruido" cardsData={noiseCards} handleOpenModal={handleOpenModal} />
 
       <SensorMeasurement
         titulo="Calidad del Aire"

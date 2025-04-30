@@ -1,32 +1,32 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { loginUser } from '../../services/loginUser';  // Asegúrate de que la ruta sea correcta
-import "./Login.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import { jwtDecode } from "jwt-decode";
-import Swal from 'sweetalert2';  // Importar SweetAlert2
+import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2'; // Importar SweetAlert2
+import loginUser from '../../services/loginUser'; // Asegúrate de que la ruta sea correcta
 
-function Login({setShowLoginButton}) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Login({ setShowLoginButton }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const token = await loginUser(email, password);
     if (token) {
       // Guardar el token en localStorage
-      localStorage.setItem("access_token", token);
-  
+      localStorage.setItem('access_token', token);
+
       // Decodificar el token para obtener el rol
       const decodedToken = jwtDecode(token);
-      const role = decodedToken.role;  // Accede al rol en los claims adicionales
-  
-      // Guardar el rol en localStorage
-      localStorage.setItem("user_role", role);
+      const { role } = decodedToken; // Accede al rol en los claims adicionales
 
-      navigate("/");
+      // Guardar el rol en localStorage
+      localStorage.setItem('user_role', role);
+
+      navigate('/');
       window.location.reload();
     } else {
       // Mostrar alerta si las credenciales son incorrectas
@@ -40,10 +40,13 @@ function Login({setShowLoginButton}) {
 
   return (
     <div className="login-container">
-      <button className="back-button" onClick={() => {
-        navigate('/');
-        setShowLoginButton(true);
-      }}>
+      <button
+        className="back-button"
+        onClick={() => {
+          navigate('/');
+          setShowLoginButton(true);
+        }}
+      >
         <ExitToAppRoundedIcon />
       </button>
       <div className="login-form">
@@ -51,12 +54,7 @@ function Login({setShowLoginButton}) {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Correo Electronico</label>
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="form-group">
             <label>Contraseña</label>

@@ -34,8 +34,8 @@
   color: black;
 }
 
-.form-group input[type="text"],
-.form-group input[type="password"] {
+.form-group input[type='text'],
+.form-group input[type='password'] {
   width: 100%;
   padding: 10px;
   width: 280px;
@@ -47,7 +47,7 @@
 .login-form button {
   width: 100%;
   padding: 10px;
-  background-color: #3FC244;
+  background-color: #3fc244;
   color: white;
   font-weight: bold;
   border: none;
@@ -59,7 +59,7 @@
   position: absolute;
   top: 40px;
   right: 40px;
-  background-color: #3FC244;
+  background-color: #3fc244;
   color: white;
   border: none;
   border-radius: 50%;

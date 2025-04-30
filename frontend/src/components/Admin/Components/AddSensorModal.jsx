@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
-import { Modal, Box, TextField, Button, IconButton, FormGroup, FormControlLabel, Checkbox, Grid, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import {
+  Modal,
+  Box,
+  TextField,
+  Button,
+  IconButton,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import './AddSensorModal.css'; 
+import './AddSensorModal.css';
 
-const AddSensorModal = ({ open, onClose, handleAddSensor }) => {
+function AddSensorModal({ open, onClose, handleAddSensor }) {
   const [sensorData, setSensorData] = useState({
     nombre: '',
     latitud: '',
@@ -14,7 +28,7 @@ const AddSensorModal = ({ open, onClose, handleAddSensor }) => {
       humedadrelativa: false,
       ruido: false,
       calidadaire: false,
-    }
+    },
   });
 
   const handleChange = (e) => {
@@ -35,7 +49,7 @@ const AddSensorModal = ({ open, onClose, handleAddSensor }) => {
 
   const handleSubmit = () => {
     handleAddSensor(sensorData);
-    onClose(); 
+    onClose();
   };
 
   return (
@@ -142,6 +156,6 @@ const AddSensorModal = ({ open, onClose, handleAddSensor }) => {
       </Box>
     </Modal>
   );
-};
+}
 
 export default AddSensorModal;

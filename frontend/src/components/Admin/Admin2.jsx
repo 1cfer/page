@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable import/no-extraneous-dependencies */
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -25,14 +26,15 @@ import { getSensorData } from '../../services/getSensorData';
 
 import styles from './Admin2.module.css';
 
-function RowActions({sensor, setSelectedSensor, setOpenModal}) {
-
+function RowActions({ sensor, setSelectedSensor, setOpenModal }) {
   return (
     <>
-      <IconButton onClick={() => {
-        setOpenModal(true)
-        setSelectedSensor(sensor)
-      }}>
+      <IconButton
+        onClick={() => {
+          setOpenModal(true);
+          setSelectedSensor(sensor);
+        }}
+      >
         <EditIcon />
       </IconButton>
       <IconButton>
@@ -40,8 +42,7 @@ function RowActions({sensor, setSelectedSensor, setOpenModal}) {
       </IconButton>
     </>
   );
-
-};
+}
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -72,11 +73,7 @@ function TablePaginationActions(props) {
       >
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
@@ -98,19 +95,18 @@ function TablePaginationActions(props) {
 }
 
 export default function Admin2() {
-
   const [sensorData, setSensorData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedSensor, setSelectedSensor] = useState({});
 
   const fetchData = () => {
     getSensorData()
-      .then(data => {
+      .then((data) => {
         setSensorData(data);
       })
-      .catch(error => console.error('Error al obtener los datos:', error));
+      .catch((error) => console.error('Error al obtener los datos:', error));
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -130,11 +126,11 @@ export default function Admin2() {
   const getStatusClass = (status) => {
     switch (status) {
       case 'activo':
-        return styles.activo; 
+        return styles.activo;
       case 'inactivo':
-        return styles.inactivo; 
+        return styles.inactivo;
       case 'dañado':
-        return styles.dañado;  
+        return styles.dañado;
       default:
         return ''; // Return an empty string or a default style
     }
@@ -148,11 +144,11 @@ export default function Admin2() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1} className="main-container">
-        <Grid size={1}></Grid>
-        <Grid size={10}> 
+        <Grid size={1} />
+        <Grid size={10}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead sx={{backgroundColor: '#AEDD94'}}>
+              <TableHead sx={{ backgroundColor: '#AEDD94' }}>
                 <TableRow>
                   <TableCell align="center">Estado</TableCell>
                   <TableCell align="center">ID</TableCell>
@@ -170,13 +166,15 @@ export default function Admin2() {
                   : sensorData
                 )?.map((sensor) => (
                   <TableRow
-                    key={sensor.id_sensor+sensor.tipo}
+                    key={sensor.id_sensor + sensor.tipo}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell align="center">
                       <div className={styles.rowState}>
-                      <FiberManualRecordIcon className={`${styles.circle} ${getStatusClass(sensor.estado)}`}/>
-                      {sensor.estado}
+                        <FiberManualRecordIcon
+                          className={`${styles.circle} ${getStatusClass(sensor.estado)}`}
+                        />
+                        {sensor.estado}
                       </div>
                     </TableCell>
                     <TableCell align="center">{sensor.id_sensor}</TableCell>
@@ -186,7 +184,11 @@ export default function Admin2() {
                     <TableCell align="center">{sensor.longitud}</TableCell>
                     <TableCell align="center">{sensor.fecha_instalacion}</TableCell>
                     <TableCell align="center">
-                      <RowActions sensor={sensor} setSelectedSensor={setSelectedSensor} setOpenModal={setOpenModal}/>
+                      <RowActions
+                        sensor={sensor}
+                        setSelectedSensor={setSelectedSensor}
+                        setOpenModal={setOpenModal}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -216,7 +218,7 @@ export default function Admin2() {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid size={1}></Grid>
+        <Grid size={1} />
       </Grid>
       <SensorModal
         open={openModal}

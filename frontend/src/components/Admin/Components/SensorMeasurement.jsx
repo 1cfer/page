@@ -1,15 +1,15 @@
 import React from 'react';
-import LocationCard from './LocationCard'; 
-import styles from './SensorMeasurement.module.css'; 
+import LocationCard from './LocationCard';
+import styles from './SensorMeasurement.module.css';
 
-const SensorMeasurement = ({ titulo, cardsData, handleOpenModal }) => {
+function SensorMeasurement({ titulo, cardsData, handleOpenModal }) {
   return (
     <div className={styles.sensorMeasurement}>
       <h2 className={styles.title}>{titulo}</h2>
       <div className={styles.cardsRow}>
-        {cardsData.map((card,index) => (
+        {cardsData.map((card, index) => (
           <LocationCard
-            key={index} 
+            key={index}
             nombreId={card.nombreId}
             ubicacion={card.ubicacion}
             estado={card.estado}
@@ -20,7 +20,6 @@ const SensorMeasurement = ({ titulo, cardsData, handleOpenModal }) => {
       </div>
     </div>
   );
-};
+}
 
 export default SensorMeasurement;
-

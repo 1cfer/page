@@ -1,21 +1,21 @@
-//Components
-import SensorCard from "./components/Sensorcard";
+// Components
 import HomeWorkRoundedIcon from '@mui/icons-material/HomeWorkRounded';
-import { NavLink } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, TileLayer, useMap, Popup } from "react-leaflet";
+import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, Marker, TileLayer, useMap, Popup } from 'react-leaflet';
 
-//Services
-import { getSensorData } from "../../services/getSensorData";
+// Services
 
-//styles
-import { renderToString } from "react-dom/server";
-import styles from "./Mapa.module.css";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+// styles
+import { renderToString } from 'react-dom/server';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 import RadioButtonCheckedRoundedIcon from '@mui/icons-material/RadioButtonCheckedRounded';
+import { getSensorData } from '../../services/getSensorData';
+import SensorCard from './components/Sensorcard';
+import styles from './Mapa.module.css';
 
-const Mapa = () => {
+function Mapa() {
   const [data, setData] = useState([]);
   const position = [6.242391, -75.589642];
   const bounds = [
@@ -37,8 +37,8 @@ const Mapa = () => {
     return null; // Aseguramos que el componente no renderiza nada
   }
 
-  //Icons
-  const radioButtonIconHtml = renderToString(<RadioButtonCheckedRoundedIcon/>);
+  // Icons
+  const radioButtonIconHtml = renderToString(<RadioButtonCheckedRoundedIcon />);
   const customIcon = new L.divIcon({
     html: radioButtonIconHtml,
     className: styles.customIcon,
@@ -46,7 +46,7 @@ const Mapa = () => {
 
   return (
     <section className={styles.Wrapper}>
-      <NavLink to={"/ecovilla"}>
+      <NavLink to="/ecovilla">
         <button className={styles.openBocetoButton}>
           <HomeWorkRoundedIcon />
         </button>
@@ -55,7 +55,7 @@ const Mapa = () => {
         bounds={bounds}
         zoom={20}
         center={position}
-        zoomControl={true}
+        zoomControl
         scrollWheelZoom={false}
         className={styles.leafletContainer}
       >
@@ -84,6 +84,6 @@ const Mapa = () => {
       </MapContainer>
     </section>
   );
-};
+}
 
 export default Mapa;

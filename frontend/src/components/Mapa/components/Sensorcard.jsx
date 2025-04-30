@@ -1,17 +1,17 @@
-import React from "react";
-import "./Sensorcard.css";
+import React from 'react';
+import './Sensorcard.css';
 
 function SensorCard({ sensor }) {
   const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString("es-CO", options);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString('es-CO', options);
   };
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString("es-CO", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return date.toLocaleTimeString('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
       hour12: false,
     });
   };
@@ -22,18 +22,18 @@ function SensorCard({ sensor }) {
         <span className="sensor-title">Sensor</span>
         <span
           className={`status-badge ${
-            sensor.estado === "activo"
-              ? "activo"
-              : sensor.estado === "dañado"
-              ? "dañado"
-              : "desactivado"
+            sensor.estado === 'activo'
+              ? 'activo'
+              : sensor.estado === 'dañado'
+                ? 'dañado'
+                : 'desactivado'
           }`}
         >
-          {sensor.estado === "activo"
-            ? "activo"
-            : sensor.estado === "dañado"
-            ? "dañado"
-            : "desactivado"}
+          {sensor.estado === 'activo'
+            ? 'activo'
+            : sensor.estado === 'dañado'
+              ? 'dañado'
+              : 'desactivado'}
         </span>
       </div>
       <h1 className="sensor-name">{sensor.tipo}</h1>
@@ -65,8 +65,8 @@ function SensorCard({ sensor }) {
         </div>
       </div>
       <div className="decorative-circles">
-        <div className="circle large"></div>
-        <div className="circle small"></div>
+        <div className="circle large" />
+        <div className="circle small" />
       </div>
     </div>
   );

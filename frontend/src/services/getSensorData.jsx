@@ -1,28 +1,27 @@
 export const getSensorData = async () => {
-    try {
-      const response = await fetch('http://127.0.0.1:5000/api/sensores');
-      if (!response.ok) {
-        throw new Error(`Error al obtener los datos: ${response.statusText}`);
-      }
-      const sensorsData = await response.json();
-      return sensorsData;
-    } catch (error) {
-        console.error("Error en getTrialData:", error);
+  try {
+    const response = await fetch('http://127.0.0.1:5000/api/sensores');
+    if (!response.ok) {
+      throw new Error(`Error al obtener los datos: ${response.statusText}`);
     }
-  };
-
+    const sensorsData = await response.json();
+    return sensorsData;
+  } catch (error) {
+    console.error('Error en getTrialData:', error);
+  }
+};
 
 // Función para actualizar un sensor
-export const updateSensor = async (nombreId,id_sensor, latitud, longitud, estado, imagenurl) => {
+export const updateSensor = async (nombreId, idSensor, latitud, longitud, estado, imagenurl) => {
   try {
-    const response = await fetch(`http://127.0.0.1:5000/api/sensores/${id_sensor}`, {
+    const response = await fetch(`http://127.0.0.1:5000/api/sensores/${idSensor}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         nombreId,
-        id_sensor,
+        idSensor,
         latitud,
         longitud,
         estado,
@@ -35,14 +34,14 @@ export const updateSensor = async (nombreId,id_sensor, latitud, longitud, estado
     }
     return await response.json();
   } catch (error) {
-    console.error("Error en updateSensor:", error);
+    console.error('Error en updateSensor:', error);
     throw error;
   }
 };
 
-export const deleteSensor = async (id_sensor) => {
+export const deleteSensor = async (idSensor) => {
   try {
-    const response = await fetch(`http://127.0.0.1:5000/api/sensores/${id_sensor}`, {
+    const response = await fetch(`http://127.0.0.1:5000/api/sensores/${idSensor}`, {
       method: 'DELETE',
     });
 
@@ -60,8 +59,7 @@ export const deleteSensor = async (id_sensor) => {
     console.log('Respuesta de eliminación:', data);
     return data;
   } catch (error) {
-    console.error("Error al eliminar el sensor:", error);
+    console.error('Error al eliminar el sensor:', error);
     throw error;
   }
 };
-
