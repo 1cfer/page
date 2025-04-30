@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Dashboard.css';
 import InsertChartOutlinedRoundedIcon from '@mui/icons-material/InsertChartOutlined';
 import { LineChart } from '@mui/x-charts';
+import PropTypes from 'prop-types';
 
 // Función para formatear la fecha en MM/DD
 const formatDate = (date) => {
@@ -56,6 +57,18 @@ function SensorSection({ sensorType, metrics, chart }) {
     </div>
   );
 }
+
+SensorSection.propTypes = {
+  sensorType: PropTypes.string.isRequired,
+  metrics: PropTypes.arrayOf(PropTypes.string).isRequired,
+  chart: PropTypes.shape({
+    title: PropTypes.string,
+    xAxisData: PropTypes.string,
+    series: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+  }).isRequired,
+};
 
 function Dashboard() {
   const [metricsData, setMetricsData] = useState([]);

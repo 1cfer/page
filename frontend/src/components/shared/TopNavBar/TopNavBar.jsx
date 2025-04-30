@@ -12,6 +12,7 @@ import Menu from '@mui/material/Menu';
 import Grid from '@mui/material/Grid2';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
 import AgevitalLogo from '../../../assets/agevitalLogo.png';
 
 // Styles
@@ -156,3 +157,9 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
     </Box>
   );
 }
+
+TopNavBar.propTypes = {
+  setOpenSideNavBar: PropTypes.func.isRequired,
+  showLoginButton: PropTypes.bool.isRequired,
+  setShowLoginButton: PropTypes.func.isRequired,
+};

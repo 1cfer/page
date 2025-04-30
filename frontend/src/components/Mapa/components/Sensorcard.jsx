@@ -1,5 +1,6 @@
 import React from 'react';
 import './Sensorcard.css';
+import PropTypes from 'prop-types';
 
 function SensorCard({ sensor }) {
   const formatDate = (dateString) => {
@@ -20,21 +21,7 @@ function SensorCard({ sensor }) {
     <div className="sensor-card">
       <div className="sensor-status">
         <span className="sensor-title">Sensor</span>
-        <span
-          className={`status-badge ${
-            sensor.estado === 'activo'
-              ? 'activo'
-              : sensor.estado === 'dañado'
-                ? 'dañado'
-                : 'desactivado'
-          }`}
-        >
-          {sensor.estado === 'activo'
-            ? 'activo'
-            : sensor.estado === 'dañado'
-              ? 'dañado'
-              : 'desactivado'}
-        </span>
+        <span className={`status-badge ${sensor.estado}`}>{sensor.estado}</span>
       </div>
       <h1 className="sensor-name">{sensor.tipo}</h1>
       <hr />
@@ -73,3 +60,18 @@ function SensorCard({ sensor }) {
 }
 
 export default SensorCard;
+
+SensorCard.propTypes = {
+  sensor: PropTypes.shape({
+    id_sensor: PropTypes.string,
+    nombre: PropTypes.string,
+    tipo: PropTypes.string,
+    estado: PropTypes.string,
+    latitud: PropTypes.string,
+    longitud: PropTypes.string,
+    fecha_instalacion: PropTypes.string,
+    medida_promedio: PropTypes.number,
+    medida_maxima: PropTypes.number,
+    medida_minima: PropTypes.number,
+  }).isRequired,
+};

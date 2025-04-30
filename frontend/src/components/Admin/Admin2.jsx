@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useTheme } from '@mui/material/styles';
+import PropTypes from 'prop-types';
 import SensorModal from './Components/SensorModal';
 
 import { getSensorData } from '../../services/getSensorData';
@@ -43,6 +44,19 @@ function RowActions({ sensor, setSelectedSensor, setOpenModal }) {
     </>
   );
 }
+
+RowActions.propTypes = {
+  sensor: PropTypes.shape({
+    id_sensor: PropTypes.string,
+    nombre: PropTypes.string,
+    tipo: PropTypes.string,
+    latitud: PropTypes.string,
+    longitud: PropTypes.string,
+    fecha_instalacion: PropTypes.string,
+  }).isRequired,
+  setSelectedSensor: PropTypes.func.isRequired,
+  setOpenModal: PropTypes.func.isRequired,
+};
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -93,6 +107,13 @@ function TablePaginationActions(props) {
     </Box>
   );
 }
+
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+};
 
 export default function Admin2() {
   const [sensorData, setSensorData] = useState([]);

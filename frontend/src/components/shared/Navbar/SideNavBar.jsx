@@ -10,6 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import PropTypes from 'prop-types';
 
 // Icons
 import HomeIcon from '@mui/icons-material/Home';
@@ -87,3 +88,8 @@ export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
     </div>
   );
 }
+
+SideNavBar.propTypes = {
+  openSideNavBar: PropTypes.bool.isRequired,
+  setOpenSideNavBar: PropTypes.func.isRequired,
+};

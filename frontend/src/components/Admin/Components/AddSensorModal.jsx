@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import './AddSensorModal.css';
+import PropTypes from 'prop-types';
 
 function AddSensorModal({ open, onClose, handleAddSensor }) {
   const [sensorData, setSensorData] = useState({
@@ -159,3 +160,9 @@ function AddSensorModal({ open, onClose, handleAddSensor }) {
 }
 
 export default AddSensorModal;
+
+AddSensorModal.propTypes = {
+  open: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  handleAddSensor: PropTypes.func.isRequired,
+};

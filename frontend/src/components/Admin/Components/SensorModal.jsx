@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid2';
 import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
 import styles from './SensorModal.module.css';
 import { updateSensor } from '../../../services/getSensorData';
 
@@ -139,3 +140,14 @@ function SensorModal({ open, handleClose, selectedSensor }) {
 }
 
 export default SensorModal;
+
+SensorModal.propTypes = {
+  open: PropTypes.string.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  selectedSensor: PropTypes.shape({
+    nombre: PropTypes.string,
+    latitud: PropTypes.string,
+    longitud: PropTypes.string,
+    estado: PropTypes.string,
+  }).isRequired,
+};

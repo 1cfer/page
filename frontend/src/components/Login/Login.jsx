@@ -4,6 +4,7 @@ import './Login.css';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2'; // Importar SweetAlert2
+import PropTypes from 'prop-types';
 import loginUser from '../../services/loginUser'; // Asegúrate de que la ruta sea correcta
 
 function Login({ setShowLoginButton }) {
@@ -73,3 +74,7 @@ function Login({ setShowLoginButton }) {
 }
 
 export default Login;
+
+Login.propTypes = {
+  setShowLoginButton: PropTypes.func.isRequired,
+};

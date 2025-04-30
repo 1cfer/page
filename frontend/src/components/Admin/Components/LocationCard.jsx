@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import PropTypes from 'prop-types';
 import styles from './LocationCard.module.css';
 
 const getStatusClass = (status) => {
@@ -55,3 +56,11 @@ function LocationCard({ nombreId, ubicacion, estado, imagenurl, handleOpenModal 
 }
 
 export default LocationCard;
+
+LocationCard.propTypes = {
+  nombreId: PropTypes.string.isRequired,
+  ubicacion: PropTypes.string.isRequired,
+  estado: PropTypes.string.isRequired,
+  imagenurl: PropTypes.string.isRequired,
+  handleOpenModal: PropTypes.func.isRequired,
+};
