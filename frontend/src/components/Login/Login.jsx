@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2'; // Importar SweetAlert2
 import PropTypes from 'prop-types';
+import { useMutation } from '@tanstack/react-query';
+import CircularProgress from '@mui/material/CircularProgress';
 import loginUser from '../../services/loginUser'; // Asegúrate de que la ruta sea correcta
 
 function Login({ setShowLoginButton }) {
@@ -12,10 +13,27 @@ function Login({ setShowLoginButton }) {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const mutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      console.log('loged in:', data);
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error('Error creating user:', error.message);
+    },
+  });
+
+  if (mutation.isPending) {
+    return <CircularProgress />;
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(password);
+    mutation.mutate({ email, password });
 
-    const token = await loginUser(email, password);
+    /* const token = await loginUser(email, password);
     if (token) {
       // Guardar el token en localStorage
       localStorage.setItem('access_token', token);
@@ -36,7 +54,7 @@ function Login({ setShowLoginButton }) {
         title: 'Credenciales Incorrectas',
         text: 'Por favor, inténtalo de nuevo.',
       });
-    }
+    } */
   };
 
   return (

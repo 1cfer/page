@@ -1,29 +1,18 @@
-export default async function loginUser(email, password) {
-  try {
-    const response = await fetch('http://127.0.0.1:5000/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+export default async function loginUser({ email, password }) {
+  const response = await fetch('/v1/auth/tokens', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name: email, password }),
+  });
 
-    if (!response.ok) {
-      throw new Error(`Error al hacer login: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    // Asegúrate de que el token venga correctamente
-    if (data.access_token) {
-      return data.access_token;
-    }
-    throw new Error('Token no recibido.');
-  } catch (error) {
-    console.error('Error en loginUser:', error);
-    return null; // Devolvemos null si hubo un error
+  if (!response.ok) {
+    throw new Error('Failed to login');
   }
+
+  localStorage.setItem('user', email);
+  localStorage.setItem('access_token', response.headers.get('x-subject-token'));
+
+  return response.json();
 }

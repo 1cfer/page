@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,18 +12,47 @@ import Grid from '@mui/material/Grid2';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
+import { useMutation } from '@tanstack/react-query';
 import AgevitalLogo from '../../../assets/agevitalLogo.png';
 
 // Styles
 import styles from './TopNavBar.module.css';
 
+const getUserInfo = async (token) => {
+  const response = await fetch('/v1/auth/tokens', {
+    method: 'GET',
+    headers: {
+      'X-Auth-token': token,
+      'X-Subject-token': token,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get user info');
+  }
+
+  return response.json();
+};
+
 export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowLoginButton }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Estado para almacenar el rol del usuario
+  const [userInfo, setUserInfo] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const handleCloseModal = () => setOpen(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem('access_token');
+
+  const mutation = useMutation({
+    mutationFn: getUserInfo,
+    onSuccess: (data) => {
+      console.log('loged in:', data);
+      setUserInfo(data);
+    },
+    onError: (error) => {
+      console.error('Error getting user info:', error.message);
+    },
+  });
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,16 +79,13 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
     if (token) {
       setIsAuthenticated(true);
-
-      const decodedToken = jwtDecode(token);
-      setUserRole(decodedToken.role);
+      mutation.mutate(token);
     } else {
       setIsAuthenticated(false);
     }
-  }, []);
+  }, [token]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -90,7 +115,7 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
               </Grid>
               <Grid size={3} />
               <Grid size={1} className={styles.user}>
-                <p>{userRole}</p>
+                <p>{userInfo?.User?.username}</p>
               </Grid>
               <Grid size={1} className={styles.user}>
                 {isAuthenticated ? (

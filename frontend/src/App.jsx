@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 // Components
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import TopNavBar from './components/shared/TopNavBar/TopNavBar';
 import SideNavBar from './components/shared/Navbar/SideNavBar';
 import Mapa from './components/Mapa/Mapa';
@@ -14,12 +15,14 @@ import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import Ecovilla from './components/Ecovilla/Ecovilla';
 
+const queryClient = new QueryClient();
+
 function Main() {
   const [openSideNavBar, setOpenSideNavBar] = useState(false);
   const [showLoginButton, setShowLoginButton] = useState(true);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <TopNavBar
         setOpenSideNavBar={setOpenSideNavBar}
         showLoginButton={showLoginButton}
@@ -36,7 +39,7 @@ function Main() {
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/ecovilla" exact element={<Ecovilla />} />
       </Routes>
-    </>
+    </QueryClientProvider>
   );
 }
 
