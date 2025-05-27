@@ -36,12 +36,12 @@ export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Sensors" disablePadding>
-          <ListItemButton onClick={() => navigate('/admin')}>
+        <ListItem key="Devices" disablePadding>
+          <ListItemButton onClick={() => navigate('/devices')}>
             <ListItemIcon>
               <QueryStatsIcon />
             </ListItemIcon>
-            <ListItemText primary="Sensors" />
+            <ListItemText primary="Devices" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Location" disablePadding>

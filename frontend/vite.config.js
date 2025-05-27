@@ -12,10 +12,15 @@ export default defineConfig({
           secure: false,
         },
         '/v2': {
-          target: 'http://localhost:8668',
+          target: 'http://localhost:1026',
           changeOrigin: true,
           secure: false,
         },
+        /* '/v2': {
+          target: 'http://localhost:8668',
+          changeOrigin: true,
+          secure: false,
+        }, */
       },
   }
 })

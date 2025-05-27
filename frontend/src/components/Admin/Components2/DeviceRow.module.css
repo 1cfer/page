@@ -1,0 +1,15 @@
+.circle {
+  margin-right: 5%;
+}
+
+.active {
+  color: green;
+}
+
+.inactive {
+  color: red;
+}
+
+.damaged {
+  color: purple;
+}

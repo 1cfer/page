@@ -32,7 +32,7 @@ function Main() {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/mapa" exact element={<Mapa />} />
-        <Route path="/admin" exact element={<Admin2 />} />
+        <Route path="/devices" exact element={<Admin2 />} />
         <Route path="/threed" exact element={<ThreeD />} />
         <Route path="/usuarios" exact element={<Usuarios />} />
         <Route path="/login" exact element={<Login setShowLoginButton={setShowLoginButton} />} />
