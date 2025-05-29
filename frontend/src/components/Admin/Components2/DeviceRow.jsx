@@ -39,7 +39,7 @@ const getUnit = (variable) => {
   }
 };
 
-export default function DeviceRow({ sensor, setSelectedSensor, setOpenModal }) {
+export default function DeviceRow({ sensor, setSelectedSensor, setOpenModal, setOpenDeleteModal }) {
   const keys = Object.keys(sensor);
   const variables = keys.filter(
     (key) =>
@@ -76,6 +76,7 @@ export default function DeviceRow({ sensor, setSelectedSensor, setOpenModal }) {
             sensor={sensor}
             setSelectedSensor={setSelectedSensor}
             setOpenModal={setOpenModal}
+            setOpenDeleteModal={setOpenDeleteModal}
           />
         </TableCell>
       </TableRow>
@@ -122,4 +123,5 @@ DeviceRow.propTypes = {
   }).isRequired,
   setSelectedSensor: PropTypes.func.isRequired,
   setOpenModal: PropTypes.func.isRequired,
+  setOpenDeleteModal: PropTypes.func.isRequired,
 };

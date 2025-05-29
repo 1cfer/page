@@ -4,18 +4,28 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PropTypes from 'prop-types';
 
-export default function RowActions({ sensor, setSelectedSensor, setOpenModal }) {
+export default function RowActions({
+  sensor,
+  setSelectedSensor,
+  setOpenModal,
+  setOpenDeleteModal,
+}) {
   return (
     <>
       <IconButton
         onClick={() => {
-          setOpenModal(true);
           setSelectedSensor(sensor);
+          setOpenModal(true);
         }}
       >
         <EditIcon />
       </IconButton>
-      <IconButton>
+      <IconButton
+        onClick={() => {
+          setSelectedSensor(sensor);
+          setOpenDeleteModal(true);
+        }}
+      >
         <DeleteIcon />
       </IconButton>
     </>
@@ -24,13 +34,13 @@ export default function RowActions({ sensor, setSelectedSensor, setOpenModal }) 
 
 RowActions.propTypes = {
   sensor: PropTypes.shape({
-    id_sensor: PropTypes.string,
-    nombre: PropTypes.string,
-    tipo: PropTypes.string,
-    latitud: PropTypes.string,
-    longitud: PropTypes.string,
-    fecha_instalacion: PropTypes.string,
+    id: PropTypes.string,
+    type: PropTypes.string,
+    latitude: PropTypes.string,
+    longitude: PropTypes.string,
+    creationdate: PropTypes.string,
   }).isRequired,
   setSelectedSensor: PropTypes.func.isRequired,
   setOpenModal: PropTypes.func.isRequired,
+  setOpenDeleteModal: PropTypes.func.isRequired,
 };

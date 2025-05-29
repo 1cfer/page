@@ -13,3 +13,9 @@
 .damaged {
   color: purple;
 }
+
+.rowState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

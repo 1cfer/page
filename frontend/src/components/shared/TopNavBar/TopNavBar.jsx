@@ -9,11 +9,11 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Grid from '@mui/material/Grid2';
-import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import { useMutation } from '@tanstack/react-query';
 import AgevitalLogo from '../../../assets/agevitalLogo.png';
+import GreenModal from '../GreenModal/GreenModal';
 
 // Styles
 import styles from './TopNavBar.module.css';
@@ -39,7 +39,6 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
   const [userInfo, setUserInfo] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
-  const handleCloseModal = () => setOpen(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('access_token');
 
@@ -158,27 +157,12 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
           </Box>
         </Toolbar>
       </AppBar>
-      <Modal open={open}>
-        <Box className={styles.modal}>
-          <h3>¿Desea cerrar sesión?</h3>
-          <div className={styles.buttonRow}>
-            <Button
-              variant="contained"
-              sx={{ bgcolor: '#3FC244', marginRight: '5%' }}
-              onClick={handleLogout}
-            >
-              Aceptar
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ bgcolor: '#EBEBEB', color: '#606060' }}
-              onClick={handleCloseModal}
-            >
-              Cancelar
-            </Button>
-          </div>
-        </Box>
-      </Modal>
+      <GreenModal
+        modalText="¿Desea cerrar sesión?"
+        open={open}
+        setOpen={setOpen}
+        acceptFunction={handleLogout}
+      />
     </Box>
   );
 }
