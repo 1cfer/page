@@ -28,18 +28,14 @@ const getStatusClass = (status) => {
   }
 };
 
-const getUnit = (variable) => {
-  switch (variable) {
-    case 'temperature':
-      return '°C';
-    case 'humidity':
-      return '%';
-    default:
-      return '';
-  }
-};
-
-export default function DeviceRow({ sensor, setSelectedSensor, setOpenModal, setOpenDeleteModal }) {
+export default function DeviceRow({
+  sensor,
+  setSelectedSensor,
+  setOpenModal,
+  setOpenDeleteModal,
+  variablesData,
+  setMode,
+}) {
   const keys = Object.keys(sensor);
   const variables = keys.filter(
     (key) =>
@@ -67,16 +63,17 @@ export default function DeviceRow({ sensor, setSelectedSensor, setOpenModal, set
             {sensor.state.value}
           </div>
         </TableCell>
-        <TableCell align="center">{sensor.id}</TableCell>
-        <TableCell align="center">{sensor.location.value.coordinates[0]}</TableCell>
-        <TableCell align="center">{sensor.location.value.coordinates[1]}</TableCell>
-        <TableCell align="center">{sensor.creationdate.value}</TableCell>
+        <TableCell align="center">{sensor?.id}</TableCell>
+        <TableCell align="center">{sensor?.location?.value?.coordinates[0]}</TableCell>
+        <TableCell align="center">{sensor?.location?.value?.coordinates[1]}</TableCell>
+        <TableCell align="center">{sensor?.creationdate?.value}</TableCell>
         <TableCell align="center">
           <RowActions
             sensor={sensor}
             setSelectedSensor={setSelectedSensor}
             setOpenModal={setOpenModal}
             setOpenDeleteModal={setOpenDeleteModal}
+            setMode={setMode}
           />
         </TableCell>
       </TableRow>
@@ -97,7 +94,7 @@ export default function DeviceRow({ sensor, setSelectedSensor, setOpenModal, set
                       <TableCell component="th" scope="row">
                         {variable}
                       </TableCell>
-                      <TableCell>{`${sensor[variable].value} ${getUnit(variable)}`}</TableCell>
+                      <TableCell>{`${sensor[variable].value} ${variablesData[0]?.variables?.metadata[`${variable}Unit`]?.value}`}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -124,4 +121,14 @@ DeviceRow.propTypes = {
   setSelectedSensor: PropTypes.func.isRequired,
   setOpenModal: PropTypes.func.isRequired,
   setOpenDeleteModal: PropTypes.func.isRequired,
+  variablesData: PropTypes.arrayOf(
+    PropTypes.shape({
+      variables: PropTypes.shape({
+        value: PropTypes.string,
+        type: PropTypes.string,
+        metadata: PropTypes.shape({}),
+      }),
+    })
+  ).isRequired,
+  setMode: PropTypes.func.isRequired,
 };

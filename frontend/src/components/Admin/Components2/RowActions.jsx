@@ -9,6 +9,7 @@ export default function RowActions({
   setSelectedSensor,
   setOpenModal,
   setOpenDeleteModal,
+  setMode,
 }) {
   return (
     <>
@@ -16,6 +17,7 @@ export default function RowActions({
         onClick={() => {
           setSelectedSensor(sensor);
           setOpenModal(true);
+          setMode('Edit');
         }}
       >
         <EditIcon />
@@ -43,4 +45,5 @@ RowActions.propTypes = {
   setSelectedSensor: PropTypes.func.isRequired,
   setOpenModal: PropTypes.func.isRequired,
   setOpenDeleteModal: PropTypes.func.isRequired,
+  setMode: PropTypes.func.isRequired,
 };

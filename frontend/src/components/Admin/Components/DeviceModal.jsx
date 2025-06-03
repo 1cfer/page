@@ -14,57 +14,57 @@ import PropTypes from 'prop-types';
 import { useMutation } from '@tanstack/react-query';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import styles from './SensorModal.module.css';
+import { createDevice, editDevice } from '../../../services/devices';
 import ErrorAlert from '../../shared/ErrorAlert/ErrorAlert';
 
-export default function DeviceModal({ open, handleClose, selectedSensor, getDevices }) {
-  const [sensorName, setSensorName] = useState(selectedSensor.nombre);
+function CheckboxComponent({ variableName, setCheckboxStates, checked }) {
+  const handleChange = (event) => {
+    setCheckboxStates((prev) => ({
+      ...prev,
+      [variableName]: event.target.checked,
+    }));
+  };
+
+  return (
+    <Grid size={4}>
+      <FormControlLabel
+        control={<Checkbox checked={checked} onChange={handleChange} name={variableName} />}
+        label={variableName}
+      />
+    </Grid>
+  );
+}
+
+CheckboxComponent.propTypes = {
+  variableName: PropTypes.string.isRequired,
+  setCheckboxStates: PropTypes.func.isRequired,
+  checked: PropTypes.bool.isRequired,
+};
+
+export default function DeviceModal({
+  open,
+  handleClose,
+  selectedSensor,
+  getDevices,
+  variablesData,
+  mode,
+}) {
+  const [sensorName, setSensorName] = useState(selectedSensor.id);
   const [sensorLatitude, setSensorLatitude] = useState(null);
   const [sensorLongitude, setSensorLongitude] = useState(null);
   const [sensorState, setSensorState] = useState(null);
   const [errorAlert, setErrorAlert] = useState(false);
-
-  async function createDevice() {
-    const currentDate = new Date();
-    const response = await fetch('/v2/entities', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: sensorName,
-        type: 'sensor',
-        location: {
-          type: 'geo:json',
-          value: {
-            type: 'Point',
-            coordinates: [parseFloat(sensorLatitude), parseFloat(sensorLongitude)],
-          },
-        },
-        state: {
-          type: 'String',
-          value: sensorState,
-        },
-        creationdate: {
-          type: 'DateTime',
-          value: currentDate.toISOString(),
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to create device');
-    }
-
-    return response;
-  }
+  const [checkboxStates, setCheckboxStates] = useState({});
 
   const mutation = useMutation({
     mutationFn: createDevice,
-    onSuccess: (data) => {
-      console.log('Device created:', data);
+    onSuccess: () => {
       getDevices();
       handleClose();
+      setCheckboxStates({});
     },
     onError: (error) => {
       setErrorAlert(true);
@@ -72,24 +72,56 @@ export default function DeviceModal({ open, handleClose, selectedSensor, getDevi
     },
   });
 
+  const editMutation = useMutation({
+    mutationFn: editDevice,
+    onSuccess: () => {
+      getDevices();
+      handleClose();
+      setCheckboxStates({});
+    },
+    onError: (error) => {
+      setErrorAlert(true);
+      console.error('Error editing device:', error.message);
+    },
+  });
+
   useEffect(() => {
-    setSensorName(selectedSensor.nombre);
-    setSensorLatitude(selectedSensor.latitud);
-    setSensorLongitude(selectedSensor.longitud);
-    setSensorState(selectedSensor.estado);
-  }, [selectedSensor]);
+    if (mode === 'Edit') {
+      const keys = Object.keys(selectedSensor);
+      const variables = keys.filter(
+        (key) =>
+          key !== 'id' &&
+          key !== 'type' &&
+          key !== 'creationdate' &&
+          key !== 'location' &&
+          key !== 'state'
+      );
+      const initialStates = {};
+      variables.forEach((variable) => {
+        initialStates[variable] = true;
+      });
+      setSensorName(selectedSensor?.id);
+      setSensorLatitude(selectedSensor?.location?.value?.coordinates[0]);
+      setSensorLongitude(selectedSensor?.location?.value?.coordinates[1]);
+      setSensorState(selectedSensor?.state?.value);
+      setCheckboxStates(initialStates);
+    }
+  }, [selectedSensor, mode]);
 
   return (
     <>
       <Backdrop
         sx={() => ({ color: '#fff', position: 'fixed', zIndex: 1700 })}
-        open={mutation.isPending}
+        open={mutation.isPending || editMutation.isPending}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          handleClose();
+          setCheckboxStates({});
+        }}
         PaperProps={{
           sx: {
             borderRadius: '30px',
@@ -104,19 +136,27 @@ export default function DeviceModal({ open, handleClose, selectedSensor, getDevi
                 <CloseIcon />
               </IconButton>
             </Grid>
-            <Grid size={12}>
-              <DialogTitle>Crear Sensor</DialogTitle>
+            <Grid size={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+              <DialogTitle variant="h5">
+                {mode === 'Create' ? 'Crear Dispositivo' : 'Editar Dispositivo'}
+              </DialogTitle>
             </Grid>
 
             <Grid container sx={{ padding: '0% 4% 4% 4%' }}>
               <Grid size={12}>
                 <Typography variant="body2">Nombre:</Typography>
-                <TextField
-                  value={sensorName}
-                  onChange={(e) => setSensorName(e.target.value)}
-                  fullWidth
-                  required
-                />
+                {mode === 'Create' ? (
+                  <TextField
+                    value={sensorName}
+                    onChange={(e) => setSensorName(e.target.value)}
+                    fullWidth
+                    required
+                  />
+                ) : (
+                  <Typography variant="h6" sx={{ margin: '1% 0%' }}>
+                    {sensorName}
+                  </Typography>
+                )}
               </Grid>
               <Grid size={5}>
                 <Typography variant="body2">Latitud:</Typography>
@@ -148,12 +188,44 @@ export default function DeviceModal({ open, handleClose, selectedSensor, getDevi
                   <MenuItem value="damaged">Dañado</MenuItem>
                 </Select>
               </Grid>
+              <Grid size={12}>
+                <Typography variant="body2">Variables:</Typography>
+              </Grid>
+              {variablesData &&
+                checkboxStates !== null &&
+                checkboxStates !== undefined &&
+                variablesData[0]?.variables?.value?.map((variable) => {
+                  return (
+                    <CheckboxComponent
+                      variableName={variable}
+                      setCheckboxStates={setCheckboxStates}
+                      checked={!!checkboxStates[variable]}
+                    />
+                  );
+                })}
             </Grid>
 
             <Grid size={4} />
             <Grid size={2}>
               <Button
-                onClick={mutation.mutate}
+                onClick={() =>
+                  mode === 'Create'
+                    ? mutation.mutate({
+                        checkboxStates,
+                        sensorName,
+                        sensorLatitude,
+                        sensorLongitude,
+                        sensorState,
+                      })
+                    : editMutation.mutate({
+                        checkboxStates,
+                        sensorName,
+                        sensorLatitude,
+                        sensorLongitude,
+                        sensorState,
+                        selectedSensor,
+                      })
+                }
                 sx={{
                   marginBottom: '20%',
                   backgroundColor: '#3FC244',
@@ -161,7 +233,7 @@ export default function DeviceModal({ open, handleClose, selectedSensor, getDevi
                   padding: '10%',
                 }}
               >
-                Crear
+                {mode === 'Create' ? 'Crear' : 'Editar'}
               </Button>
             </Grid>
             <Grid size={2}>
@@ -177,7 +249,11 @@ export default function DeviceModal({ open, handleClose, selectedSensor, getDevi
         </Box>
       </Dialog>
       <ErrorAlert
-        message="There was an error trying to create the device"
+        message={
+          mode === 'Create'
+            ? 'There was an error trying to create the device'
+            : 'There was an error trying to edit the device'
+        }
         errorAlert={errorAlert}
         setErrorAlert={setErrorAlert}
       />
@@ -189,10 +265,23 @@ DeviceModal.propTypes = {
   open: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
   selectedSensor: PropTypes.shape({
-    nombre: PropTypes.string,
-    latitud: PropTypes.string,
-    longitud: PropTypes.string,
-    estado: PropTypes.string,
+    id: PropTypes.string,
+    state: PropTypes.shape({
+      value: PropTypes.string,
+    }),
+    location: PropTypes.shape({
+      value: PropTypes.string,
+    }),
+    creationdate: PropTypes.string,
   }).isRequired,
   getDevices: PropTypes.func.isRequired,
+  variablesData: PropTypes.arrayOf(
+    PropTypes.shape({
+      variables: PropTypes.shape({
+        value: PropTypes.string,
+        type: PropTypes.string,
+      }),
+    })
+  ).isRequired,
+  mode: PropTypes.string.isRequired,
 };

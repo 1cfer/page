@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid2';
 import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import DeviceRow from './Components2/DeviceRow';
 import TablePaginationActions from './Components2/TablePaginationActions';
@@ -26,8 +26,14 @@ export default function Admin2() {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedSensor, setSelectedSensor] = useState({});
   const [sensorData, setSensorData] = useState([]);
+  const [mode, setMode] = useState('Create');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+
+  const { isPending, data: variablesData } = useQuery({
+    queryKey: ['variableData'],
+    queryFn: () => fetch('/v2/entities?id=variablelist').then((res) => res.json()),
+  });
 
   const mutation = useMutation({
     queryKey: ['getEntities'],
@@ -77,7 +83,7 @@ export default function Admin2() {
     <>
       <Backdrop
         sx={() => ({ color: '#fff', position: 'fixed', zIndex: 1700 })}
-        open={mutation.isPending || deleteDeviceMutation.isPending}
+        open={mutation.isPending || deleteDeviceMutation.isPending || isPending}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -88,7 +94,10 @@ export default function Admin2() {
             <Button
               variant="contained"
               sx={{ bgcolor: '#3FC244' }}
-              onClick={() => setOpenModal(true)}
+              onClick={() => {
+                setOpenModal(true);
+                setMode('Create');
+              }}
             >
               New Device
             </Button>
@@ -119,6 +128,8 @@ export default function Admin2() {
                       setSelectedSensor={setSelectedSensor}
                       setOpenModal={setOpenModal}
                       setOpenDeleteModal={setOpenDeleteModal}
+                      variablesData={variablesData}
+                      setMode={setMode}
                     />
                   ))}
                 </TableBody>
@@ -154,6 +165,8 @@ export default function Admin2() {
           handleClose={handleCloseModal}
           selectedSensor={selectedSensor}
           getDevices={mutation.mutate}
+          variablesData={variablesData}
+          mode={mode}
         />
         <GreenModal
           modalText={`¿Desea eliminar ${selectedSensor.id}?`}
