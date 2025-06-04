@@ -1,0 +1,83 @@
+.sensorCard {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  width: 270px;
+  height: auto;
+  position: relative;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.sensorStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusBadge {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  text-align: center;
+  width: 40px;
+  height: 10px;
+  
+}
+
+.statusBadge.active {
+  background-color: green;
+  color: white;
+}
+
+.statusBadge.damaged {
+  background-color: purple;
+  color: white;
+  width: 80px;
+}
+
+.statusBadge.inactive {
+  background-color: red;
+  color: white;
+  width: 80px;
+}
+
+hr {
+  border: 0.5px solid #e0e0e0;
+  margin: 10px 0;
+}
+
+.sensorInfo {
+  font-size: 1rem;
+  color: #333;
+  margin-top: 7%;
+}
+
+.infoRowSub {
+  font-weight: bold;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.variableName {
+  font-weight: bold;
+}
+
+.variableValue {
+  margin-left: 2%;
+}
+
+.variableRow {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2%;
+}

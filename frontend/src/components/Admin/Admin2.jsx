@@ -42,7 +42,7 @@ export default function Admin2() {
       setSensorData(data);
     },
     onError: (error) => {
-      console.error('Error creating device:', error.message);
+      console.error('Error getting entities:', error.message);
     },
   });
 

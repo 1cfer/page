@@ -6,7 +6,7 @@
 }
 
 .leafletContainer {
-  height: 100vh;
+  height: 90vh;
   width: 100vw;
   z-index: 1;
 }
@@ -38,5 +38,5 @@
 }
 
 .customIcon {
-  color: var(--color-purple);
+  color: #FF3823;
 }

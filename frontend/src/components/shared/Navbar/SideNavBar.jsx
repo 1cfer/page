@@ -45,7 +45,7 @@ export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
           </ListItemButton>
         </ListItem>
         <ListItem key="Location" disablePadding>
-          <ListItemButton onClick={() => navigate('/mapa')}>
+          <ListItemButton onClick={() => navigate('/map')}>
             <ListItemIcon>
               <PlaceIcon />
             </ListItemIcon>

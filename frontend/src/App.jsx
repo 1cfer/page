@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import TopNavBar from './components/shared/TopNavBar/TopNavBar';
 import SideNavBar from './components/shared/Navbar/SideNavBar';
-import Mapa from './components/Mapa/Mapa';
+import Map from './components/Map/Map';
 import Home from './components/Home/Home';
 import Admin from './components/Admin/Admin';
 import Admin2 from './components/Admin/Admin2';
@@ -31,7 +31,7 @@ function Main() {
       <SideNavBar openSideNavBar={openSideNavBar} setOpenSideNavBar={setOpenSideNavBar} />
       <Routes>
         <Route path="/" exact element={<Home />} />
-        <Route path="/mapa" exact element={<Mapa />} />
+        <Route path="/map" exact element={<Map />} />
         <Route path="/devices" exact element={<Admin2 />} />
         <Route path="/threed" exact element={<ThreeD />} />
         <Route path="/usuarios" exact element={<Usuarios />} />
