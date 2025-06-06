@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SensorMeasurement from './Components/SensorMeasurement';
-import DeviceModal from './Components/DeviceModal';
+import DeviceModal from './Components2/DeviceModal';
 import AddSensorModal from './Components/AddSensorModal';
 
 import { getSensorData } from '../../services/getSensorData';

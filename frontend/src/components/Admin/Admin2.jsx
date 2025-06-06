@@ -18,11 +18,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import DeviceRow from './Components2/DeviceRow';
 import TablePaginationActions from './Components2/TablePaginationActions';
-import DeviceModal from './Components/DeviceModal';
+import DeviceModal from './Components2/DeviceModal';
+import VariableModal from './Components2/VariableModal';
 import GreenModal from '../shared/GreenModal/GreenModal';
 
 export default function Admin2() {
   const [openModal, setOpenModal] = useState(false);
+  const [openVariableModal, setOpenVariableModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedSensor, setSelectedSensor] = useState({});
   const [sensorData, setSensorData] = useState([]);
@@ -89,8 +91,19 @@ export default function Admin2() {
       </Backdrop>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1} className="main-container">
-          <Grid size={9} />
+          <Grid size={8} />
           <Grid size={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              sx={{ bgcolor: '#3FC244' }}
+              onClick={() => {
+                setOpenVariableModal(true);
+              }}
+            >
+              New Variable
+            </Button>
+          </Grid>
+          <Grid size={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
               sx={{ bgcolor: '#3FC244' }}
@@ -167,6 +180,12 @@ export default function Admin2() {
           getDevices={mutation.mutate}
           variablesData={variablesData}
           mode={mode}
+        />
+        <VariableModal
+          open={openVariableModal}
+          setOpen={setOpenVariableModal}
+          getDevices={mutation.mutate}
+          variablesData={variablesData}
         />
         <GreenModal
           modalText={`¿Desea eliminar ${selectedSensor.id}?`}

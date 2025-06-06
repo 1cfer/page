@@ -16,7 +16,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import styles from './SensorModal.module.css';
+import styles from './DeviceModal.module.css';
 import { createDevice, editDevice } from '../../../services/devices';
 import ErrorAlert from '../../shared/ErrorAlert/ErrorAlert';
 

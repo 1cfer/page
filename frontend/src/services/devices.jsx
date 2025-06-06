@@ -20,13 +20,14 @@ export async function createDevice({
 }) {
   const currentDate = new Date();
   const addedVariables = addVariables(checkboxStates);
+  const sensorNameToSend = sensorName.toLowerCase().replace(/\s/g, '');
   const response = await fetch('/v2/entities', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id: sensorName,
+      id: sensorNameToSend,
       type: 'sensor',
       location: {
         type: 'geo:json',
