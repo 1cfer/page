@@ -6,6 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
       proxy: {
+        '/keyrock': {
+          target: 'http://localhost:7000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/keyrock/, ''),
+        },
         '/v1': {
           target: 'http://localhost:7000',
           changeOrigin: true,
@@ -13,6 +18,16 @@ export default defineConfig({
         },
         '/v2': {
           target: 'http://localhost:1026',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/idm': {
+          target: 'http://localhost:7000',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/auth': {
+          target: 'http://localhost:7000',
           changeOrigin: true,
           secure: false,
         },

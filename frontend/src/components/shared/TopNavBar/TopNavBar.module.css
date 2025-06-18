@@ -4,13 +4,21 @@
 }
 
 .userRole {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  color: #AAAAAA;
+  font-size: small;
+  margin-bottom: 20%;
+  margin-top: -20%;
 }
 
 .user {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userColumn {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

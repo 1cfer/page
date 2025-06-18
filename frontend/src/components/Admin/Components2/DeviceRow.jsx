@@ -89,14 +89,15 @@ export default function DeviceRow({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {variables.map((variable) => (
-                    <TableRow key={variable}>
-                      <TableCell component="th" scope="row">
-                        {variable}
-                      </TableCell>
-                      <TableCell>{`${sensor[variable].value} ${variablesData[0]?.variables?.metadata[`${variable}Unit`]?.value}`}</TableCell>
-                    </TableRow>
-                  ))}
+                  {variablesData &&
+                    variables.map((variable) => (
+                      <TableRow key={variable}>
+                        <TableCell component="th" scope="row">
+                          {variable}
+                        </TableCell>
+                        <TableCell>{`${sensor[variable].value} ${variablesData[0]?.variables?.metadata[`${variable}Unit`]?.value}`}</TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Box>

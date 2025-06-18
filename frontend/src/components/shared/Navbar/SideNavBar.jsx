@@ -61,7 +61,7 @@ export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
           </ListItemButton>
         </ListItem>
         <ListItem key="Users" disablePadding>
-          <ListItemButton onClick={() => navigate('/usuarios')}>
+          <ListItemButton onClick={() => navigate('/users')}>
             <ListItemIcon>
               <SensorOccupiedRoundedIcon />
             </ListItemIcon>

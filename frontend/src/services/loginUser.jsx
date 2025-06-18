@@ -12,6 +12,7 @@ export default async function loginUser({ email, password }) {
   }
 
   localStorage.setItem('user', email);
+  localStorage.setItem('password', password);
   localStorage.setItem('access_token', response.headers.get('x-subject-token'));
 
   return response.json();

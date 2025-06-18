@@ -18,7 +18,19 @@ import GreenModal from '../GreenModal/GreenModal';
 // Styles
 import styles from './TopNavBar.module.css';
 
-const getUserInfo = async (token) => {
+const logoutIdm = async () => {
+  const response = await fetch('/auth/logout?_method=DELETE', {
+    method: 'GET',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to log out');
+  }
+
+  return response;
+};
+
+const getUserInfo = async ({ token, navigate, setIsAuthenticated }) => {
   const response = await fetch('/v1/auth/tokens', {
     method: 'GET',
     headers: {
@@ -28,6 +40,8 @@ const getUserInfo = async (token) => {
   });
 
   if (!response.ok) {
+    setIsAuthenticated(false);
+    navigate('/');
     throw new Error('Failed to get user info');
   }
 
@@ -42,14 +56,26 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
   const navigate = useNavigate();
   const token = localStorage.getItem('access_token');
 
-  const mutation = useMutation({
+  const userInfoMutation = useMutation({
     mutationFn: getUserInfo,
     onSuccess: (data) => {
-      console.log('loged in:', data);
       setUserInfo(data);
+      localStorage.setItem('userId', data?.User?.id);
+      localStorage.setItem('userRole', data?.User?.admin ? 'admin' : 'user');
     },
     onError: (error) => {
       console.error('Error getting user info:', error.message);
+    },
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: logoutIdm,
+    onSuccess: () => {
+      navigate('/');
+      window.location.reload();
+    },
+    onError: (error) => {
+      console.error('Error loging out:', error.message);
     },
   });
 
@@ -73,14 +99,13 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
-    navigate('/');
-    window.location.reload();
+    logoutMutation.mutate();
   };
 
   useEffect(() => {
     if (token) {
       setIsAuthenticated(true);
-      mutation.mutate(token);
+      userInfoMutation.mutate({ token, navigate, setIsAuthenticated });
     } else {
       setIsAuthenticated(false);
     }
@@ -109,12 +134,19 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
                 )}
               </Grid>
               <Grid size={4} />
-              <Grid size={2}>
+              <Grid size={2} sx={{ display: 'flex', alignItems: 'center' }}>
                 <img src={AgevitalLogo} alt="AgeVital" width="200px" />
               </Grid>
               <Grid size={3} />
               <Grid size={1} className={styles.user}>
-                <p>{userInfo?.User?.username}</p>
+                {isAuthenticated && (
+                  <div className={styles.userColumn}>
+                    <p>{userInfo?.User?.username}</p>
+                    <span className={styles.userRole}>
+                      {userInfo?.User?.admin ? 'admin' : 'user'}
+                    </span>
+                  </div>
+                )}
               </Grid>
               <Grid size={1} className={styles.user}>
                 {isAuthenticated ? (

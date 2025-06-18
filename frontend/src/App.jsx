@@ -10,7 +10,7 @@ import Home from './components/Home/Home';
 import Admin from './components/Admin/Admin';
 import Admin2 from './components/Admin/Admin2';
 import ThreeD from './components/ThreeD/ThreeD';
-import Usuarios from './components/Usuarios/Usuarios';
+import Users from './components/Usuarios/Users';
 import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import Ecovilla from './components/Ecovilla/Ecovilla';
@@ -34,7 +34,7 @@ function Main() {
         <Route path="/map" exact element={<Map />} />
         <Route path="/devices" exact element={<Admin2 />} />
         <Route path="/threed" exact element={<ThreeD />} />
-        <Route path="/usuarios" exact element={<Usuarios />} />
+        <Route path="/users" exact element={<Users />} />
         <Route path="/login" exact element={<Login setShowLoginButton={setShowLoginButton} />} />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/ecovilla" exact element={<Ecovilla />} />
