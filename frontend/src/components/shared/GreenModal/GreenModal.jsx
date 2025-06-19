@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import styles from './GreenModal.module.css';
 
-export default function GreenModal({ modalText, open, setOpen, acceptFunction }) {
+export default function GreenModal({ modalText, open, setOpen, acceptFunction, userId }) {
   const handleCloseModal = () => setOpen(false);
 
   return (
@@ -17,7 +17,7 @@ export default function GreenModal({ modalText, open, setOpen, acceptFunction })
           <Button
             variant="contained"
             sx={{ bgcolor: '#3FC244', marginRight: '5%' }}
-            onClick={acceptFunction}
+            onClick={() => (userId ? acceptFunction({ userId }) : acceptFunction())}
           >
             Aceptar
           </Button>
@@ -39,4 +39,5 @@ GreenModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   acceptFunction: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 };

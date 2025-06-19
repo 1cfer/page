@@ -69,11 +69,12 @@ export default function DeviceRow({
         <TableCell align="center">{sensor?.creationdate?.value}</TableCell>
         <TableCell align="center">
           <RowActions
-            sensor={sensor}
-            setSelectedSensor={setSelectedSensor}
+            item={sensor}
+            setSelectedItem={setSelectedSensor}
             setOpenModal={setOpenModal}
             setOpenDeleteModal={setOpenDeleteModal}
             setMode={setMode}
+            allowEdition
           />
         </TableCell>
       </TableRow>

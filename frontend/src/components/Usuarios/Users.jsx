@@ -15,6 +15,7 @@ import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useMutation } from '@tanstack/react-query';
+import ErrorAlert from '../shared/ErrorAlert/ErrorAlert';
 
 import TablePaginationActions from '../Admin/Components2/TablePaginationActions';
 import GreenModal from '../shared/GreenModal/GreenModal';
@@ -22,8 +23,23 @@ import { getUsers } from '../../services/users';
 import UserModal from './UserModal';
 import RowActions from '../Admin/Components2/RowActions';
 
-const getAdmins = async () => {
-  const response = await fetch('/idm/admins/administrators/list', {
+const deleteUser = async ({ userId }) => {
+  const response = await fetch(`/v1/users/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      'X-Auth-token': localStorage.getItem('access_token'),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete user');
+  }
+
+  return response;
+};
+
+const getAdmins = async ({ page }) => {
+  const response = await fetch(`/idm/admins/administrators/list?page=${page + 1}`, {
     method: 'GET',
   });
 
@@ -36,11 +52,14 @@ const getAdmins = async () => {
 
 export default function Users() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openUserModal, setOpenUserModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [usersData, setUsersData] = useState({});
   const [admins, setAdmins] = useState({});
   const [adminArray, setAdminArray] = useState([]);
+  const [selectedUser, setSelectedUser] = useState({});
+  const [errorAlert, setErrorAlert] = useState(false);
 
   const checkUserRole = (userId) => {
     return adminArray.includes(userId) ? 'admin' : 'user';
@@ -66,8 +85,22 @@ export default function Users() {
     },
   });
 
+  const deleteUserMutation = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      mutation.mutate();
+      adminMutation.mutate({ page });
+      setOpenDeleteModal(false);
+    },
+    onError: (error) => {
+      setErrorAlert(true);
+      console.error('Error deleting user:', error.message);
+    },
+  });
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    adminMutation.mutate({ page: newPage });
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -77,20 +110,23 @@ export default function Users() {
 
   useEffect(() => {
     mutation.mutate();
-    adminMutation.mutate();
+    adminMutation.mutate({ page });
   }, []);
 
   useEffect(() => {
-    const tempArray = [];
+    let tempArray = [];
     admins?.admin_users?.forEach((admin) => tempArray.push(admin.id));
-    setAdminArray(tempArray);
+    setAdminArray((prev) => {
+      tempArray = tempArray.filter((id) => !prev.includes(id));
+      return [...prev, ...tempArray];
+    });
   }, [admins]);
 
   return (
     <>
       <Backdrop
         sx={() => ({ color: '#fff', position: 'fixed', zIndex: 1700 })}
-        open={mutation.isPending || adminMutation.isPending}
+        open={mutation.isPending || adminMutation.isPending || deleteUserMutation.isPending}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -132,11 +168,9 @@ export default function Users() {
                       <TableCell align="center">{checkUserRole(user?.id)}</TableCell>
                       <TableCell align="center">
                         <RowActions
-                          sensor={user}
-                          /* setSelectedSensor={setSelectedSensor}
-                          setOpenModal={setOpenModal}
+                          item={user}
+                          setSelectedItem={setSelectedUser}
                           setOpenDeleteModal={setOpenDeleteModal}
-                          setMode={setMode}  */
                         />
                       </TableCell>
                     </TableRow>
@@ -145,7 +179,7 @@ export default function Users() {
                 <TableFooter>
                   <TableRow>
                     <TablePagination
-                      rowsPerPageOptions={[6, 12, 18, { label: 'All', value: -1 }]}
+                      rowsPerPageOptions={[5, 10, 15, { label: 'All', value: -1 }]}
                       count={usersData?.users?.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
@@ -176,6 +210,18 @@ export default function Users() {
         getUsers={mutation.mutate}
         adminArray={adminArray}
         getAdmins={adminMutation.mutate}
+      />
+      <GreenModal
+        modalText={`¿Desea eliminar al usuario ${selectedUser.username}?`}
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+        acceptFunction={deleteUserMutation.mutate}
+        userId={selectedUser.id}
+      />
+      <ErrorAlert
+        message="There was an error trying to delete the user"
+        errorAlert={errorAlert}
+        setErrorAlert={setErrorAlert}
       />
     </>
   );

@@ -60,7 +60,7 @@ export default function UserModal({ open, setOpen, getUsers, adminArray, getAdmi
   const addAdminsMutation = useMutation({
     mutationFn: addAdmins,
     onSuccess: () => {
-      getAdmins();
+      getAdmins({ page: 1 });
     },
     onError: (error) => {
       console.error('Error adding admin:', error.message);
