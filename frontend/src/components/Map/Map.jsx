@@ -37,7 +37,7 @@ function Map() {
 
   const { isPending, data: entities } = useQuery({
     queryKey: ['entities'],
-    queryFn: () => fetch('/v2/entities?type=sensor').then((res) => res.json()),
+    queryFn: () => fetch('/v2/entities?type=device').then((res) => res.json()),
   });
 
   const { variablesPending, data: variablesData } = useQuery({

@@ -46,6 +46,7 @@ export default function DeviceRow({
       key !== 'state'
   );
   const [open, setOpen] = useState(false);
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
 
   return (
     <>
@@ -67,16 +68,18 @@ export default function DeviceRow({
         <TableCell align="center">{sensor?.location?.value?.coordinates[0]}</TableCell>
         <TableCell align="center">{sensor?.location?.value?.coordinates[1]}</TableCell>
         <TableCell align="center">{sensor?.creationdate?.value}</TableCell>
-        <TableCell align="center">
-          <RowActions
-            item={sensor}
-            setSelectedItem={setSelectedSensor}
-            setOpenModal={setOpenModal}
-            setOpenDeleteModal={setOpenDeleteModal}
-            setMode={setMode}
-            allowEdition
-          />
-        </TableCell>
+        {isAdmin && (
+          <TableCell align="center">
+            <RowActions
+              item={sensor}
+              setSelectedItem={setSelectedSensor}
+              setOpenModal={setOpenModal}
+              setOpenDeleteModal={setOpenDeleteModal}
+              setMode={setMode}
+              allowEdition
+            />
+          </TableCell>
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

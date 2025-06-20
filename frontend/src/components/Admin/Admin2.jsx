@@ -31,6 +31,7 @@ export default function Admin2() {
   const [mode, setMode] = useState('Create');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
 
   const { isPending, data: variablesData } = useQuery({
     queryKey: ['variableData'],
@@ -39,7 +40,7 @@ export default function Admin2() {
 
   const mutation = useMutation({
     queryKey: ['getEntities'],
-    mutationFn: () => fetch('/v2/entities?type=sensor').then((res) => res.json()),
+    mutationFn: () => fetch('/v2/entities?type=device').then((res) => res.json()),
     onSuccess: (data) => {
       setSensorData(data);
     },
@@ -91,31 +92,35 @@ export default function Admin2() {
       </Backdrop>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1} className="main-container">
-          <Grid size={8} />
-          <Grid size={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              sx={{ bgcolor: '#3FC244' }}
-              onClick={() => {
-                setOpenVariableModal(true);
-              }}
-            >
-              New Variable
-            </Button>
-          </Grid>
-          <Grid size={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              sx={{ bgcolor: '#3FC244' }}
-              onClick={() => {
-                setOpenModal(true);
-                setMode('Create');
-              }}
-            >
-              New Device
-            </Button>
-          </Grid>
-          <Grid size={1} />
+          {isAdmin && (
+            <>
+              <Grid size={8} />
+              <Grid size={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: '#3FC244' }}
+                  onClick={() => {
+                    setOpenVariableModal(true);
+                  }}
+                >
+                  New Variable
+                </Button>
+              </Grid>
+              <Grid size={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: '#3FC244' }}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setMode('Create');
+                  }}
+                >
+                  New Device
+                </Button>
+              </Grid>
+              <Grid size={1} />
+            </>
+          )}
           <Grid size={1} />
           <Grid size={10}>
             <TableContainer component={Paper} sx={{ marginTop: '2%' }}>
@@ -128,7 +133,7 @@ export default function Admin2() {
                     <TableCell align="center">Latitud</TableCell>
                     <TableCell align="center">Longitud</TableCell>
                     <TableCell align="center">Fecha</TableCell>
-                    <TableCell align="center">Acciones</TableCell>
+                    {isAdmin && <TableCell align="center">Acciones</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>

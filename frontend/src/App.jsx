@@ -20,6 +20,7 @@ const queryClient = new QueryClient();
 function Main() {
   const [openSideNavBar, setOpenSideNavBar] = useState(false);
   const [showLoginButton, setShowLoginButton] = useState(true);
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -34,7 +35,7 @@ function Main() {
         <Route path="/map" exact element={<Map />} />
         <Route path="/devices" exact element={<Admin2 />} />
         <Route path="/threed" exact element={<ThreeD />} />
-        <Route path="/users" exact element={<Users />} />
+        {isAdmin && <Route path="/users" exact element={<Users />} />}
         <Route path="/login" exact element={<Login setShowLoginButton={setShowLoginButton} />} />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/ecovilla" exact element={<Ecovilla />} />

@@ -22,6 +22,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 
 export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
   const navigate = useNavigate();
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpenSideNavBar(false)}>
@@ -60,14 +61,16 @@ export default function SideNavBar({ openSideNavBar, setOpenSideNavBar }) {
             <ListItemText primary="3D" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Users" disablePadding>
-          <ListItemButton onClick={() => navigate('/users')}>
-            <ListItemIcon>
-              <SensorOccupiedRoundedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Users" />
-          </ListItemButton>
-        </ListItem>
+        {isAdmin && (
+          <ListItem key="Users" disablePadding>
+            <ListItemButton onClick={() => navigate('/users')}>
+              <ListItemIcon>
+                <SensorOccupiedRoundedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Users" />
+            </ListItemButton>
+          </ListItem>
+        )}
         <ListItem key="Dashboard" disablePadding>
           <ListItemButton onClick={() => navigate('/dashboard')}>
             <ListItemIcon>

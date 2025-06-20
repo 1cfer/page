@@ -28,7 +28,7 @@ export async function createDevice({
     },
     body: JSON.stringify({
       id: sensorNameToSend,
-      type: 'sensor',
+      type: 'device',
       location: {
         type: 'geo:json',
         value: {
