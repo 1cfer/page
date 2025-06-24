@@ -128,12 +128,12 @@ export default function Admin2() {
                 <TableHead sx={{ backgroundColor: '#AEDD94' }}>
                   <TableRow>
                     <TableCell />
-                    <TableCell align="center">Estado</TableCell>
-                    <TableCell align="center">Nombre</TableCell>
-                    <TableCell align="center">Latitud</TableCell>
-                    <TableCell align="center">Longitud</TableCell>
-                    <TableCell align="center">Fecha</TableCell>
-                    {isAdmin && <TableCell align="center">Acciones</TableCell>}
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Name</TableCell>
+                    <TableCell align="center">Latitude</TableCell>
+                    <TableCell align="center">Longitude</TableCell>
+                    <TableCell align="center">Date</TableCell>
+                    {isAdmin && <TableCell align="center">Actions</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -193,7 +193,7 @@ export default function Admin2() {
           variablesData={variablesData}
         />
         <GreenModal
-          modalText={`¿Desea eliminar ${selectedSensor.id}?`}
+          modalText={`Do you want to delete ${selectedSensor.id}?`}
           open={openDeleteModal}
           setOpen={setOpenDeleteModal}
           acceptFunction={deleteDeviceMutation.mutate}

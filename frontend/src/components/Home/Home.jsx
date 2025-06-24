@@ -11,9 +11,8 @@ function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Verifica si el token está en localStorage
     const token = localStorage.getItem('access_token');
-    setIsAuthenticated(token !== null); // Establece si el usuario está logueado
+    setIsAuthenticated(token !== null);
   }, []);
 
   return (
@@ -21,16 +20,15 @@ function Home() {
       <Grid container spacing={1} className="main-container">
         <Grid size={1} />
         <Grid size={3}>
-          <h1 className="title">Monitoreo Inteligente para un Envejecimiento Saludable</h1>
+          <h1 className="title">Smart Monitoring for Healthy Aging</h1>
           <p className="text">
-            AgeVital+ utiliza tecnología IoT para monitorear tu salud física y mental en tiempo
-            real.
+            AgeVital+ uses IoT technology to monitor your physical and mental health in real time.
           </p>
-          <h1 className="title">Beneficios Clave</h1>
+          <h1 className="title">Key Benefits</h1>
           <p className="text">
-            AgeVital+ conecta sensores no invasivos en el hogar para recopilar datos sobre la salud
-            física y el ambiente. Estos datos son analizados en tiempo real para detectar cualquier
-            anomalía, permitiendo que los usuarios y cuidadores tomen decisiones informadas.
+            AgeVital+ connects noninvasive sensors at home to collect data from physical health and
+            environment. This data is analyzed in real time to detect any anomalies, allowing users
+            and caregivers to make informed decisions.
           </p>
         </Grid>
         <Grid size={1} />
@@ -51,24 +49,24 @@ function Home() {
         <Grid size={2}>
           <div className="icon-item">
             <AccessTimeOutlinedIcon className="icon" />
-            <h3>Monitoreo en Tiempo Real</h3>
-            <p>Supervisión continua de tu salud.</p>
+            <h3>Real-Time Monitoring</h3>
+            <p>Continuous monitoring of your health.</p>
           </div>
         </Grid>
         <Grid size={1} />
         <Grid size={2}>
           <div className="icon-item">
             <FavoriteBorderOutlinedIcon className="icon" />
-            <h3>Detección Temprana</h3>
-            <p>Identificación de riesgos cardiovasculares.</p>
+            <h3>Early Detection</h3>
+            <p>Cardiovascular risks identification</p>
           </div>
         </Grid>
         <Grid size={1} />
         <Grid size={2}>
           <div className="icon-item">
             <StarOutlineOutlinedIcon className="icon" />
-            <h3>Fácil de Usar</h3>
-            <p>Accesible para personas mayores y cuidadores.</p>
+            <h3>Easy to Use</h3>
+            <p>Accessible for seniors and caregivers.</p>
           </div>
         </Grid>
         <Grid size={2} />

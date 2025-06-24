@@ -60,6 +60,7 @@ export default function Users() {
   const [adminArray, setAdminArray] = useState([]);
   const [selectedUser, setSelectedUser] = useState({});
   const [errorAlert, setErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const checkUserRole = (userId) => {
     return adminArray.includes(userId) ? 'admin' : 'user';
@@ -71,6 +72,8 @@ export default function Users() {
       setUsersData(data);
     },
     onError: (error) => {
+      setErrorAlert(true);
+      setErrorMessage(error.message);
       console.error('Error getting users:', error.message);
     },
   });
@@ -94,6 +97,7 @@ export default function Users() {
     },
     onError: (error) => {
       setErrorAlert(true);
+      setErrorMessage(error.message);
       console.error('Error deleting user:', error.message);
     },
   });
@@ -151,10 +155,10 @@ export default function Users() {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead sx={{ backgroundColor: '#AEDD94' }}>
                   <TableRow>
-                    <TableCell align="center">Nombre de usuario</TableCell>
+                    <TableCell align="center">User name</TableCell>
                     <TableCell align="center">Email</TableCell>
-                    <TableCell align="center">Rol</TableCell>
-                    <TableCell align="center">Acciones</TableCell>
+                    <TableCell align="center">Role</TableCell>
+                    <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -179,7 +183,7 @@ export default function Users() {
                 <TableFooter>
                   <TableRow>
                     <TablePagination
-                      rowsPerPageOptions={[5, 10, 15, { label: 'All', value: -1 }]}
+                      rowsPerPageOptions={[5]}
                       count={usersData?.users?.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
@@ -212,14 +216,14 @@ export default function Users() {
         getAdmins={adminMutation.mutate}
       />
       <GreenModal
-        modalText={`¿Desea eliminar al usuario ${selectedUser.username}?`}
+        modalText={`Do you want to delete user ${selectedUser.username}?`}
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
         acceptFunction={deleteUserMutation.mutate}
         userId={selectedUser.id}
       />
       <ErrorAlert
-        message="There was an error trying to delete the user"
+        message={`Error on users: ${errorMessage}`}
         errorAlert={errorAlert}
         setErrorAlert={setErrorAlert}
       />

@@ -116,10 +116,10 @@ function Login({ setShowLoginButton }) {
           <ExitToAppRoundedIcon />
         </button>
         <div className="login-form">
-          <h2>Inicio de Sesión</h2>
+          <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Correo Electronico</label>
+              <label>email</label>
               <input
                 type="text"
                 value={email}
@@ -128,7 +128,7 @@ function Login({ setShowLoginButton }) {
               />
             </div>
             <div className="form-group">
-              <label>Contraseña</label>
+              <label>Password</label>
               <input
                 type="password"
                 value={password}
@@ -136,7 +136,7 @@ function Login({ setShowLoginButton }) {
                 required
               />
             </div>
-            <button type="submit">Ingresar</button>
+            <button type="submit">Submit</button>
           </form>
         </div>
       </div>

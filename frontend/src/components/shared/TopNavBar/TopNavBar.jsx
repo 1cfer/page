@@ -174,13 +174,13 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={logOut}>Cerrar sesión</MenuItem>
+                      <MenuItem onClick={logOut}>Log out</MenuItem>
                     </Menu>
                   </div>
                 ) : (
                   showLoginButton && (
                     <Button variant="contained" sx={{ bgcolor: '#3FC244' }} onClick={handleLogin}>
-                      Ingresar
+                      Log in
                     </Button>
                   )
                 )}
@@ -190,7 +190,7 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
         </Toolbar>
       </AppBar>
       <GreenModal
-        modalText="¿Desea cerrar sesión?"
+        modalText="Do you want to log out?"
         open={open}
         setOpen={setOpen}
         acceptFunction={handleLogout}

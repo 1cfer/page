@@ -138,13 +138,13 @@ export default function DeviceModal({
             </Grid>
             <Grid size={12} sx={{ display: 'flex', justifyContent: 'center' }}>
               <DialogTitle variant="h5">
-                {mode === 'Create' ? 'Crear Dispositivo' : 'Editar Dispositivo'}
+                {mode === 'Create' ? 'Create Device' : 'Edit Device'}
               </DialogTitle>
             </Grid>
 
             <Grid container sx={{ padding: '0% 4% 4% 4%' }}>
               <Grid size={12}>
-                <Typography variant="body2">Nombre:</Typography>
+                <Typography variant="body2">Name:</Typography>
                 {mode === 'Create' ? (
                   <TextField
                     value={sensorName}
@@ -159,7 +159,7 @@ export default function DeviceModal({
                 )}
               </Grid>
               <Grid size={5}>
-                <Typography variant="body2">Latitud:</Typography>
+                <Typography variant="body2">Latitude:</Typography>
                 <TextField
                   value={sensorLatitude}
                   onChange={(e) => setSensorLatitude(e.target.value)}
@@ -168,7 +168,7 @@ export default function DeviceModal({
               </Grid>
               <Grid size={2} />
               <Grid size={5}>
-                <Typography variant="body2">Longitud:</Typography>
+                <Typography variant="body2">Longitude:</Typography>
                 <TextField
                   value={sensorLongitude}
                   onChange={(e) => setSensorLongitude(e.target.value)}
@@ -176,16 +176,16 @@ export default function DeviceModal({
                 />
               </Grid>
               <Grid size={12}>
-                <Typography variant="body2">Estado:</Typography>
+                <Typography variant="body2">Status:</Typography>
                 <Select
                   value={sensorState}
                   onChange={(e) => setSensorState(e.target.value)}
                   fullWidth
                   required
                 >
-                  <MenuItem value="active">Activo</MenuItem>
-                  <MenuItem value="inactive">Inactivo</MenuItem>
-                  <MenuItem value="damaged">Dañado</MenuItem>
+                  <MenuItem value="active">Active</MenuItem>
+                  <MenuItem value="inactive">Inactive</MenuItem>
+                  <MenuItem value="damaged">Damaged</MenuItem>
                 </Select>
               </Grid>
               <Grid size={12}>
@@ -233,7 +233,7 @@ export default function DeviceModal({
                   padding: '10%',
                 }}
               >
-                {mode === 'Create' ? 'Crear' : 'Editar'}
+                {mode === 'Create' ? 'Create' : 'Edit'}
               </Button>
             </Grid>
             <Grid size={2}>
@@ -241,7 +241,7 @@ export default function DeviceModal({
                 onClick={handleClose}
                 sx={{ backgroundColor: '#EBEBEB', color: 'black', padding: '10%' }}
               >
-                Cancelar
+                Cancel
               </Button>
             </Grid>
             <Grid size={4} />

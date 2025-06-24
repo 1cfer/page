@@ -19,14 +19,14 @@ export default function GreenModal({ modalText, open, setOpen, acceptFunction, u
             sx={{ bgcolor: '#3FC244', marginRight: '5%' }}
             onClick={() => (userId ? acceptFunction({ userId }) : acceptFunction())}
           >
-            Aceptar
+            Accept
           </Button>
           <Button
             variant="contained"
             sx={{ bgcolor: '#EBEBEB', color: '#606060' }}
             onClick={handleCloseModal}
           >
-            Cancelar
+            Cancel
           </Button>
         </div>
       </Box>

@@ -89,7 +89,7 @@ export default function DeviceRow({
                 <TableHead sx={{ backgroundColor: '#31DE38' }}>
                   <TableRow>
                     <TableCell>Variable</TableCell>
-                    <TableCell>Último valor</TableCell>
+                    <TableCell>Last value</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
