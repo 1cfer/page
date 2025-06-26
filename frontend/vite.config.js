@@ -31,11 +31,11 @@ export default defineConfig({
           changeOrigin: true,
           secure: false,
         },
-        /* '/v2': {
+        '/quantumleap': {
           target: 'http://localhost:8668',
           changeOrigin: true,
-          secure: false,
-        }, */
+          rewrite: (path) => path.replace(/^\/quantumleap/, ''),
+        },
       },
   }
 })

@@ -3,152 +3,147 @@ import './Dashboard.css';
 import InsertChartOutlinedRoundedIcon from '@mui/icons-material/InsertChartOutlined';
 import { LineChart } from '@mui/x-charts';
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid2';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useMutation } from '@tanstack/react-query';
+import Backdrop from '@mui/material/Backdrop';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
-// Función para formatear la fecha en MM/DD
-const formatDate = (date) => {
-  const month = date.getMonth() + 1; // Los meses son 0-indexados, por eso se suma 1
-  const day = date.getDate();
-  return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
-};
+const colors = ['#0C5806', '#0C59CF', '#FF5733', '#606060', '#FF3823', '#000000'];
 
-const formatSensorType = (sensorType) => {
-  switch (sensorType) {
-    case 'temperatura':
-      return 'Temperatura';
-    case 'humedadrelativa':
-      return 'Humedad Relativa';
-    case 'ruido':
-      return 'Ruido';
-    default:
-      return sensorType;
-  }
-};
+function VariableChart({ label, values, timeArray, color }) {
+  const shouldRender = values.some((value) => value !== null);
 
-function SensorSection({ sensorType, metrics, chart }) {
   return (
-    <div className="sensor-section">
-      <div className="sensor-metrics">
-        <h2>{formatSensorType(sensorType)}</h2>
-        <div className="metric-group">
-          {metrics.map((metric, index) => (
-            <div className="metric-card" key={`${sensorType}-${index}`}>
-              <h3>{metric.title}</h3>
-              <p>{metric.value}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="sensor-chart">
-        <h2>{chart.title}</h2>
-        <LineChart
-          xAxis={[
-            {
-              data: chart.xAxisData,
-              scaleType: 'time',
-              tickFormatter: (value) => formatDate(new Date(value)),
-              tickMinStep: 3600 * 1000 * 24,
-            },
-          ]}
-          series={chart.series}
-          width={chart.width || 500}
-          height={chart.height || 300}
-        />
-      </div>
-    </div>
+    shouldRender && (
+      <>
+        <Grid size={5}>
+          <LineChart
+            xAxis={[
+              {
+                data: timeArray?.map((date) => new Date(date)),
+                scaleType: 'time',
+                tickMinStep: 3600 * 1000 * 24,
+              },
+            ]}
+            series={[
+              {
+                label,
+                data: values,
+                color,
+              },
+            ]}
+            height={300}
+          />
+        </Grid>
+        <Grid size={1} />
+      </>
+    )
   );
 }
 
-SensorSection.propTypes = {
-  sensorType: PropTypes.string.isRequired,
-  metrics: PropTypes.arrayOf(PropTypes.string).isRequired,
-  chart: PropTypes.shape({
-    title: PropTypes.string,
-    xAxisData: PropTypes.string,
-    series: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
-  }).isRequired,
+VariableChart.propTypes = {
+  label: PropTypes.string.isRequired,
+  values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  timeArray: PropTypes.arrayOf(PropTypes.string).isRequired,
+  color: PropTypes.string.isRequired,
 };
 
 function Dashboard() {
-  const [metricsData, setMetricsData] = useState([]);
-  const [chartData, setChartData] = useState([]);
+  const [devices, setDevices] = useState([]);
+  const [pickedDevice, setPickedDevice] = useState('');
+  const [deviceData, setDeviceData] = useState({});
+
+  const deviceHistoryMutation = useMutation({
+    queryKey: ['entityData'],
+    mutationFn: () =>
+      fetch(`/quantumleap/v2/entities/${pickedDevice}?type=device`, {
+        headers: {
+          'Fiware-Service': '',
+          'Fiware-ServicePath': '/',
+        },
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      console.log(data);
+      setDeviceData(data);
+    },
+    onError: (error) => {
+      console.error('Error getting device:', error.message);
+    },
+  });
+
+  const mutation = useMutation({
+    queryKey: ['getEntities'],
+    mutationFn: () => fetch('/v2/entities?type=device').then((res) => res.json()),
+    onSuccess: (data) => {
+      setDevices(data);
+      setPickedDevice(data[0]?.id);
+    },
+    onError: (error) => {
+      console.error('Error getting devices:', error.message);
+    },
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:5000/api/globalmetrics');
-        const data = await response.json();
-        const filteredData = data.filter(
-          (metric) => metric.maxima !== null && metric.minima !== null && metric.promedio !== null
-        );
-        setMetricsData(filteredData);
+    if (pickedDevice !== '') {
+      deviceHistoryMutation.mutate();
+    }
+  }, [pickedDevice]);
 
-        const charts = filteredData.map((metric) => {
-          const now = new Date();
-          const dates = [];
-          for (let i = 6; i >= 0; i--) {
-            const date = new Date(now);
-            date.setDate(now.getDate() - i);
-            dates.push(date);
-          }
-
-          const min = parseFloat(metric.minima);
-          const max = parseFloat(metric.maxima);
-          const values = dates.map(() => (Math.random() * (max - min) + min).toFixed(2));
-
-          return {
-            title: `Tendencia de ${formatSensorType(metric.tipo_medicion)}`,
-            xAxisData: dates,
-            series: [{ data: values }],
-          };
-        });
-        setChartData(charts);
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-      }
-    };
-    fetchData();
+  useEffect(() => {
+    mutation.mutate();
   }, []);
 
   const openNewTab = () => {
-    window.open(
-      'http://10.38.32.137:3000/d/de15iqdns3gu8f/age-sensors?orgId=1&refresh=auto',
-      '_blank'
-    );
+    window.open('http://localhost:3000', '_blank');
   };
 
   return (
-    <div className="dashboard-container">
-      <button className="open-dashboard-button" onClick={openNewTab}>
-        <InsertChartOutlinedRoundedIcon />
-      </button>
-      <div className="header">
-        <h1>Dashboard de Sensores</h1>
-      </div>
-
-      {/* <embed src="http://10.38.32.137:3000" style={{width: "1400px", height: "700px"}}/> */}
-
-      <div className="sensor-sections">
-        {metricsData.map((metricData, index) => {
-          const sensorType = metricData.tipo_medicion;
-          const metrics = [
-            { title: 'Promedio Global', value: `${parseFloat(metricData.promedio).toFixed(2)}` },
-            { title: 'Máximo', value: `${parseFloat(metricData.maxima).toFixed(2)}` },
-            { title: 'Mínimo', value: `${parseFloat(metricData.minima).toFixed(2)}` },
-          ];
-          const chart = chartData[index];
-          return (
-            <SensorSection
-              key={sensorType}
-              sensorType={sensorType}
-              metrics={metrics}
-              chart={chart}
+    <>
+      <Backdrop
+        sx={() => ({ color: '#fff', position: 'fixed', zIndex: 1700 })}
+        open={mutation.isPending || deviceHistoryMutation.isPending}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={1} sx={{ marginLeft: '5%' }}>
+          <Grid size={3} sx={{ margin: '2% 0% 2% 0%' }}>
+            <Typography variant="body2" sx={{ marginBottom: '1%' }}>
+              Device:
+            </Typography>
+            <Select
+              value={pickedDevice}
+              onChange={(e) => setPickedDevice(e.target.value)}
+              fullWidth
+              required
+            >
+              {devices?.map((dev) => (
+                <MenuItem key={dev?.id} value={dev?.id}>
+                  {dev?.id}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid size={9} />
+          {deviceData?.attributes?.map((variable, index) => (
+            <VariableChart
+              key={variable?.attrName}
+              label={variable?.attrName}
+              values={variable?.values}
+              timeArray={deviceData?.index}
+              color={colors[index]}
             />
-          );
-        })}
-      </div>
-    </div>
+          ))}
+        </Grid>
+        <button className="open-dashboard-button" onClick={openNewTab} type="button">
+          <InsertChartOutlinedRoundedIcon />
+        </button>
+      </Box>
+    </>
   );
 }
 
