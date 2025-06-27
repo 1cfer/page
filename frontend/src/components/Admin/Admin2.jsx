@@ -31,16 +31,28 @@ export default function Admin2() {
   const [mode, setMode] = useState('Create');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const isAdmin = localStorage.getItem('userRole') === 'admin';
+  /* const isAdmin = localStorage.getItem('userRole') === 'admin'; */
+  const isAdmin = true;
+  const token = localStorage.getItem('access_token');
 
   const { isPending, data: variablesData } = useQuery({
     queryKey: ['variableData'],
-    queryFn: () => fetch('/v2/entities?id=variablelist').then((res) => res.json()),
+    queryFn: () =>
+      fetch('/v2/entities?id=variablelist', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
   });
 
   const mutation = useMutation({
     queryKey: ['getEntities'],
-    mutationFn: () => fetch('/v2/entities?type=device').then((res) => res.json()),
+    mutationFn: () =>
+      fetch('/v2/entities?type=device', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
     onSuccess: (data) => {
       setSensorData(data);
     },
@@ -54,6 +66,9 @@ export default function Admin2() {
     mutationFn: () =>
       fetch(`/v2/entities/${selectedSensor.id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }).then((res) => res),
     onSuccess: () => {
       mutation.mutate();

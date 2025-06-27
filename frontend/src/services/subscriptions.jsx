@@ -10,6 +10,7 @@ export default async function editSubscription({ subscriptions, variableName }) 
   const response = await fetch(`v2/subscriptions/${subscriptions[0]?.id}`, {
     method: 'PATCH',
     headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

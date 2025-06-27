@@ -46,7 +46,8 @@ export default function DeviceRow({
       key !== 'state'
   );
   const [open, setOpen] = useState(false);
-  const isAdmin = localStorage.getItem('userRole') === 'admin';
+  /* const isAdmin = localStorage.getItem('userRole') === 'admin'; */
+  const isAdmin = true;
 
   return (
     <>

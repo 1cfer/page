@@ -77,7 +77,12 @@ function Dashboard() {
 
   const mutation = useMutation({
     queryKey: ['getEntities'],
-    mutationFn: () => fetch('/v2/entities?type=device').then((res) => res.json()),
+    mutationFn: () =>
+      fetch('/v2/entities?type=device', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      }).then((res) => res.json()),
     onSuccess: (data) => {
       setDevices(data);
       setPickedDevice(data[0]?.id);

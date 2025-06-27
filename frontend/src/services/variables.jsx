@@ -13,6 +13,7 @@ export default async function editVariables({ variablesData, variableName, varia
   const response = await fetch(`v2/entities/variablelist/attrs`, {
     method: 'PUT',
     headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
