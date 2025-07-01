@@ -84,8 +84,9 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
     mutationFn: getUserInfo,
     onSuccess: (data) => {
       setUserInfo(data);
-      /* localStorage.setItem('userId', data?.User?.id);
-      localStorage.setItem('userRole', data?.User?.admin ? 'admin' : 'user'); */
+      console.log(data);
+      console.log('role: ', data?.roles[0]?.name);
+      localStorage.setItem('userRole', data?.roles[0]?.name === 'orionAdmin' ? 'admin' : 'user');
     },
     onError: (error) => {
       console.error('Error getting user info:', error.message);
@@ -138,6 +139,7 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('userRole');
     logoutMutation.mutate();
   };
 
@@ -191,9 +193,7 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
                 {isAuthenticated && (
                   <div className={styles.userColumn}>
                     <p>{userInfo?.username}</p>
-                    {/* <span className={styles.userRole}>
-                      {userInfo?.User?.admin ? 'admin' : 'user'}
-                    </span> */}
+                    <span className={styles.userRole}>{localStorage.getItem('userRole')}</span>
                   </div>
                 )}
               </Grid>

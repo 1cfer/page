@@ -1,211 +1,218 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { useState, useEffect } from 'react';
-import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import SensorMeasurement from './Components/SensorMeasurement';
-import DeviceModal from './Components2/DeviceModal';
-import AddSensorModal from './Components/AddSensorModal';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableFooter from '@mui/material/TableFooter';
+import TablePagination from '@mui/material/TablePagination';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid2';
+import Button from '@mui/material/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { getSensorData } from '../../services/getSensorData';
+import DeviceRow from './Components/DeviceRow';
+import TablePaginationActions from './Components/TablePaginationActions';
+import DeviceModal from './Components/DeviceModal';
+import VariableModal from './Components/VariableModal';
+import GreenModal from '../shared/GreenModal/GreenModal';
 
-import styles from './Admin.module.css';
-
-function Admin() {
-  const [temperatureCards, setTemperatureCards] = useState([]);
-  const [humidityCards, setHumidityCards] = useState([]);
-  const [noiseCards, setNoiseCards] = useState([]);
-  const [airQualityCards, setAirQualityCards] = useState([]);
+export default function Admin() {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedSensor, setSelectedSensor] = useState(null);
-  const [openAddModal, setOpenAddModal] = useState(false);
-  const image = 'https://www.upb.edu.co/es/imagenes/img-upbsostenibleaerea-1464235639641.jpeg';
-  const [tiposMedicion, setTiposMedicion] = useState([]);
+  const [openVariableModal, setOpenVariableModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedSensor, setSelectedSensor] = useState({});
+  const [sensorData, setSensorData] = useState([]);
+  const [mode, setMode] = useState('Create');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
+  const token = localStorage.getItem('access_token');
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/tipos_medicion')
-      .then((response) => response.json())
-      .then((data) => setTiposMedicion(data))
-      .catch((error) => console.error('Error al obtener tipos de medición:', error));
-  }, []);
+  const { isPending, data: variablesData } = useQuery({
+    queryKey: ['variableData'],
+    queryFn: () =>
+      fetch('/v2/entities?id=variablelist', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
+  });
 
-  const fetchData = () => {
-    getSensorData()
-      .then((data) => {
-        const sensorTypeToStateSetter = {
-          temperatura: setTemperatureCards,
-          humedadrelativa: setHumidityCards,
-          ruido: setNoiseCards,
-          calidadaire: setAirQualityCards,
-        };
+  const mutation = useMutation({
+    queryKey: ['getEntities'],
+    mutationFn: () =>
+      fetch('/v2/entities?type=device', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      setSensorData(data);
+    },
+    onError: (error) => {
+      console.error('Error getting entities:', error.message);
+    },
+  });
 
-        Object.entries(sensorTypeToStateSetter).forEach(([sensorType, setState]) => {
-          const cards = data
-            .filter(
-              (sensor) =>
-                sensor.tipo === sensorType || sensor.tipo.toLowerCase() === sensorType.toLowerCase()
-            )
-            .map((sensor) => ({
-              nombreId: sensor.nombre,
-              id_sensor: sensor.id_sensor,
-              ubicacion: `(${sensor.latitud}, ${sensor.longitud})`,
-              estado: sensor.estado.toLowerCase(),
-              imagenurl: image,
-            }));
-          setState(cards);
-        });
-      })
-      .catch((error) => console.error('Error al obtener los datos:', error));
+  const deleteDeviceMutation = useMutation({
+    queryKey: ['deleteEntity'],
+    mutationFn: () =>
+      fetch(`/v2/entities/${selectedSensor.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res),
+    onSuccess: () => {
+      mutation.mutate();
+      setOpenDeleteModal(false);
+    },
+    onError: (error) => {
+      console.error('Error deleting device:', error.message);
+    },
+  });
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  useEffect(() => {
-    fetchData();
-    const intervalId = setInterval(fetchData, 5000); // Actualiza cada 5 segundos
-    return () => clearInterval(intervalId);
-  }, []);
-
-  const handleCloseAddModal = () => {
-    setOpenAddModal(false);
-  };
-
-  const handleOpenModal = (sensor) => {
-    setSelectedSensor(sensor);
-    setOpenModal(true);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setSelectedSensor(null);
+    setSelectedSensor({});
   };
 
-  const handleUpdateSensor = (updatedSensor) => {
-    const updateCards = (cards) =>
-      cards.map((card) => (card.nombreId === updatedSensor.nombreId ? updatedSensor : card));
-
-    setTemperatureCards((prevCards) => updateCards(prevCards));
-    setHumidityCards((prevCards) => updateCards(prevCards));
-    setNoiseCards((prevCards) => updateCards(prevCards));
-    setAirQualityCards((prevCards) => updateCards(prevCards));
-
-    handleCloseModal();
-  };
-
-  const handleDeleteSensor = (nombreId) => {
-    const filterCards = (cards) => cards.filter((card) => card.nombreId !== nombreId);
-
-    setTemperatureCards((prevCards) => filterCards(prevCards));
-    setHumidityCards((prevCards) => filterCards(prevCards));
-    setNoiseCards((prevCards) => filterCards(prevCards));
-    setAirQualityCards((prevCards) => filterCards(prevCards));
-
-    handleCloseModal();
-  };
-
-  const handleAddSensor = (newSensor) => {
-    const tiposMedicionSeleccionados = Object.keys(newSensor.mediciones)
-      .filter((tipo) => newSensor.mediciones[tipo])
-      .map((tipo) => {
-        const tipoMedicion = tiposMedicion.find((tm) => tm.nombre_tipo === tipo);
-        return tipoMedicion ? tipoMedicion.id_tipo_medicion : null;
-      })
-      .filter((idTipoMedicion) => idTipoMedicion !== null);
-
-    const nuevoSensor = {
-      nombre: newSensor.nombre,
-      estado: newSensor.estado,
-      latitud: parseFloat(newSensor.latitud),
-      longitud: parseFloat(newSensor.longitud),
-      tipos_medicion: tiposMedicionSeleccionados,
-    };
-    console.log(newSensor);
-    console.log(nuevoSensor);
-
-    fetch('http://127.0.0.1:5000/api/sensores', {
-      method: 'OPTIONS',
-      headers: {
-        'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'Content-Type',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return fetch('http://127.0.0.1:5000/api/sensores', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuevoSensor),
-        });
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.error) {
-          console.error('Error al crear el sensor:', data.error);
-        } else {
-          console.log('Sensor creado exitosamente:', data);
-          fetchData(); // Actualiza los datos
-          handleCloseAddModal();
-        }
-      })
-      .catch((error) => console.error('Error en la solicitud:', error));
-  };
+  useEffect(() => {
+    mutation.mutate();
+  }, []);
 
   return (
-    <div className={styles.measurement}>
-      <SensorMeasurement
-        titulo="Temperatura"
-        cardsData={temperatureCards}
-        handleOpenModal={handleOpenModal}
-      />
-
-      <SensorMeasurement
-        titulo="humedad"
-        cardsData={humidityCards}
-        handleOpenModal={handleOpenModal}
-      />
-      <SensorMeasurement titulo="ruido" cardsData={noiseCards} handleOpenModal={handleOpenModal} />
-
-      <SensorMeasurement
-        titulo="Calidad del Aire"
-        cardsData={airQualityCards}
-        handleOpenModal={handleOpenModal}
-      />
-
-      {selectedSensor && (
-        <SensorModal
+    <>
+      <Backdrop
+        sx={() => ({ color: '#fff', position: 'fixed', zIndex: 1700 })}
+        open={mutation.isPending || deleteDeviceMutation.isPending || isPending}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={1} className="main-container">
+          {isAdmin && (
+            <>
+              <Grid size={8} />
+              <Grid size={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: '#3FC244' }}
+                  onClick={() => {
+                    setOpenVariableModal(true);
+                  }}
+                >
+                  New Variable
+                </Button>
+              </Grid>
+              <Grid size={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: '#3FC244' }}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setMode('Create');
+                  }}
+                >
+                  New Device
+                </Button>
+              </Grid>
+              <Grid size={1} />
+            </>
+          )}
+          <Grid size={1} />
+          <Grid size={10}>
+            <TableContainer component={Paper} sx={{ marginTop: '2%' }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead sx={{ backgroundColor: '#AEDD94' }}>
+                  <TableRow>
+                    <TableCell />
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Name</TableCell>
+                    <TableCell align="center">Latitude</TableCell>
+                    <TableCell align="center">Longitude</TableCell>
+                    <TableCell align="center">Date</TableCell>
+                    {isAdmin && <TableCell align="center">Actions</TableCell>}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {(rowsPerPage > 0
+                    ? sensorData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : sensorData
+                  )?.map((sensor) => (
+                    <DeviceRow
+                      sensor={sensor}
+                      setSelectedSensor={setSelectedSensor}
+                      setOpenModal={setOpenModal}
+                      setOpenDeleteModal={setOpenDeleteModal}
+                      variablesData={variablesData}
+                      setMode={setMode}
+                    />
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[6, 12, 18, { label: 'All', value: -1 }]}
+                      count={sensorData?.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      slotProps={{
+                        select: {
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        },
+                      }}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActions}
+                      align="center"
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid size={1} />
+        </Grid>
+        <DeviceModal
           open={openModal}
           handleClose={handleCloseModal}
-          nombreId={selectedSensor.nombreId}
-          id_sensor={selectedSensor.id_sensor}
-          ubicacion={selectedSensor.ubicacion}
-          estado={selectedSensor.estado}
-          imagenurl={selectedSensor.imagenurl}
-          handleUpdate={handleUpdateSensor}
-          handleDelete={handleDeleteSensor}
+          selectedSensor={selectedSensor}
+          getDevices={mutation.mutate}
+          variablesData={variablesData}
+          mode={mode}
         />
-      )}
-      <Fab
-        color="primary"
-        aria-label="add"
-        style={{ position: 'fixed', bottom: 16, right: 16 }}
-        onClick={() => setOpenAddModal(true)}
-      >
-        <AddIcon className="custom-color" />
-      </Fab>
-
-      <AddSensorModal
-        open={openAddModal}
-        onClose={handleCloseAddModal}
-        handleAddSensor={handleAddSensor}
-      />
-    </div>
+        <VariableModal
+          open={openVariableModal}
+          setOpen={setOpenVariableModal}
+          getDevices={mutation.mutate}
+          variablesData={variablesData}
+        />
+        <GreenModal
+          modalText={`Do you want to delete ${selectedSensor.id}?`}
+          open={openDeleteModal}
+          setOpen={setOpenDeleteModal}
+          acceptFunction={deleteDeviceMutation.mutate}
+        />
+      </Box>
+    </>
   );
 }
-
-export default Admin;
