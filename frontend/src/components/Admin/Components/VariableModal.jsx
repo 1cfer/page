@@ -24,7 +24,12 @@ export default function VariableModal({ open, setOpen, getDevices, variablesData
 
   const { subscriptionsPending, data: subscriptions } = useQuery({
     queryKey: ['subscriptions'],
-    queryFn: () => fetch('v2/subscriptions').then((res) => res.json()),
+    queryFn: () =>
+      fetch('v2/subscriptions', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      }).then((res) => res.json()),
   });
 
   const mutation = useMutation({

@@ -17,7 +17,7 @@ export default defineConfig({
           secure: false,
         },
         '/v2': {
-          target: 'http://localhost:1026',
+          target: 'http://localhost:1027',
           changeOrigin: true,
           secure: false,
         },
@@ -27,6 +27,16 @@ export default defineConfig({
           secure: false,
         },
         '/auth': {
+          target: 'http://localhost:7000',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/oauth2': {
+          target: 'http://localhost:7000',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/user': {
           target: 'http://localhost:7000',
           changeOrigin: true,
           secure: false,

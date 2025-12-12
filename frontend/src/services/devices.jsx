@@ -24,6 +24,7 @@ export async function createDevice({
   const response = await fetch('/v2/entities', {
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -67,6 +68,7 @@ export async function editDevice({
   const response = await fetch(`v2/entities/${sensorName}/attrs`, {
     method: 'PUT',
     headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

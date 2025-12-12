@@ -31,11 +31,10 @@ const logoutIdm = async () => {
 };
 
 const getUserInfo = async ({ token, navigate, setIsAuthenticated }) => {
-  const response = await fetch('/v1/auth/tokens', {
+  const response = await fetch('/user', {
     method: 'GET',
     headers: {
-      'X-Auth-token': token,
-      'X-Subject-token': token,
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -48,20 +47,46 @@ const getUserInfo = async ({ token, navigate, setIsAuthenticated }) => {
   return response.json();
 };
 
+const tokenRequest = async ({ code }) => {
+  const response = await fetch('/oauth2/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: 'http://localhost:5173',
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      client_secret: import.meta.env.VITE_CLIENT_SECRET,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get token');
+  }
+
+  return response.json();
+};
+
 export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowLoginButton }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem('access_token');
+  const tokenLocal = localStorage.getItem('access_token');
+  const clientId = import.meta.env.VITE_CLIENT_ID;
+  const redirectUri = encodeURIComponent('http://localhost:5173');
+  const keyrockURL = 'http://localhost:7000/oauth2/authorize';
 
   const userInfoMutation = useMutation({
     mutationFn: getUserInfo,
     onSuccess: (data) => {
       setUserInfo(data);
-      localStorage.setItem('userId', data?.User?.id);
-      localStorage.setItem('userRole', data?.User?.admin ? 'admin' : 'user');
+      console.log(data);
+      console.log('role: ', data?.roles[0]?.name);
+      localStorage.setItem('userRole', data?.roles[0]?.name === 'orionAdmin' ? 'admin' : 'user');
     },
     onError: (error) => {
       console.error('Error getting user info:', error.message);
@@ -79,6 +104,20 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
     },
   });
 
+  const mutation = useMutation({
+    mutationFn: tokenRequest,
+    onSuccess: (data) => {
+      const token = data.access_token;
+      console.log('token: ', token);
+      localStorage.setItem('access_token', token); // or use any secure storage
+      setIsAuthenticated(true);
+    },
+    onError: (error) => {
+      console.error('Error getting token:', error.message);
+      setIsAuthenticated(false);
+    },
+  });
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -93,23 +132,35 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    /* navigate('/login'); */
+    window.location.href = `${keyrockURL}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=xyz`;
     setShowLoginButton(false);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('userRole');
     logoutMutation.mutate();
   };
 
   useEffect(() => {
-    if (token) {
+    if (tokenLocal) {
+      console.log('token: ', tokenLocal);
       setIsAuthenticated(true);
-      userInfoMutation.mutate({ token, navigate, setIsAuthenticated });
+      userInfoMutation.mutate({ token: tokenLocal, navigate, setIsAuthenticated });
     } else {
       setIsAuthenticated(false);
     }
-  }, [token]);
+  }, [tokenLocal]);
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const code = query.get('code');
+
+    if (code) {
+      mutation.mutate({ code });
+    }
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -141,10 +192,8 @@ export default function TopNavBar({ setOpenSideNavBar, showLoginButton, setShowL
               <Grid size={1} className={styles.user}>
                 {isAuthenticated && (
                   <div className={styles.userColumn}>
-                    <p>{userInfo?.User?.username}</p>
-                    <span className={styles.userRole}>
-                      {userInfo?.User?.admin ? 'admin' : 'user'}
-                    </span>
+                    <p>{userInfo?.username}</p>
+                    <span className={styles.userRole}>{localStorage.getItem('userRole')}</span>
                   </div>
                 )}
               </Grid>

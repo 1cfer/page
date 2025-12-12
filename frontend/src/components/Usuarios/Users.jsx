@@ -17,11 +17,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useMutation } from '@tanstack/react-query';
 import ErrorAlert from '../shared/ErrorAlert/ErrorAlert';
 
-import TablePaginationActions from '../Admin/Components2/TablePaginationActions';
+import TablePaginationActions from '../Admin/Components/TablePaginationActions';
 import GreenModal from '../shared/GreenModal/GreenModal';
 import { getUsers } from '../../services/users';
 import UserModal from './UserModal';
-import RowActions from '../Admin/Components2/RowActions';
+import RowActions from '../Admin/Components/RowActions';
 
 const deleteUser = async ({ userId }) => {
   const response = await fetch(`/v1/users/${userId}`, {

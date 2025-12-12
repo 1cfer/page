@@ -34,15 +34,26 @@ function Map() {
     }),
     []
   );
+  const token = localStorage.getItem('access_token');
 
   const { isPending, data: entities } = useQuery({
     queryKey: ['entities'],
-    queryFn: () => fetch('/v2/entities?type=device').then((res) => res.json()),
+    queryFn: () =>
+      fetch('/v2/entities?type=device', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
   });
 
   const { variablesPending, data: variablesData } = useQuery({
     queryKey: ['variableData'],
-    queryFn: () => fetch('/v2/entities?id=variablelist').then((res) => res.json()),
+    queryFn: () =>
+      fetch('/v2/entities?id=variablelist', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
   });
 
   // Icons
