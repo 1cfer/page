@@ -4,7 +4,7 @@ version: "3.8"
 services:
   # Orion es el motor principal, el agente, el context broker
   orion:
-    image: fiware/orion-ld
+    image: mi-keyrock-estetico
     hostname: orion-ages
     container_name: orion-ages
     depends_on:

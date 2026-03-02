@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 // Components
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -14,12 +14,17 @@ import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import Ecovilla from './components/Ecovilla/Ecovilla';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function Main() {
   const [openSideNavBar, setOpenSideNavBar] = useState(false);
   const [showLoginButton, setShowLoginButton] = useState(true);
-  /* const isAdmin = localStorage.getItem('userRole') === 'admin'; */
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -29,15 +34,27 @@ function Main() {
         setShowLoginButton={setShowLoginButton}
       />
       <SideNavBar openSideNavBar={openSideNavBar} setOpenSideNavBar={setOpenSideNavBar} />
+      
       <Routes>
-        <Route path="/" exact element={<Home />} />
-        <Route path="/map" exact element={<Map />} />
-        <Route path="/devices" exact element={<Admin />} />
-        <Route path="/threed" exact element={<ThreeD />} />
-        {/* {isAdmin && <Route path="/users" exact element={<Users />} />} */}
-        <Route path="/login" exact element={<Login setShowLoginButton={setShowLoginButton} />} />
-        <Route path="/dashboard" exact element={<Dashboard />} />
-        <Route path="/ecovilla" exact element={<Ecovilla />} />
+        {/* Home Principal */}
+        <Route path="/" element={<Home />} />
+        
+        {/* ESTA ES LA RUTA CLAVE: Permite que el Dashboard cargue Tars, Moreha, etc. */}
+        <Route path="/project/:projectId" element={<Dashboard />} />
+        
+        {/* Rutas de Herramientas */}
+        <Route path="/map" element={<Map />} />
+        <Route path="/devices" element={<Admin />} />
+        <Route path="/threed" element={<ThreeD />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/login" element={<Login setShowLoginButton={setShowLoginButton} />} />
+        
+        {/* Dashboards Directos */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/ecovilla" element={<Ecovilla />} />
+
+        {/* Redirección por si acaso */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </QueryClientProvider>
   );

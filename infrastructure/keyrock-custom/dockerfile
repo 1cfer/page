@@ -1,0 +1,13 @@
+# 1. Usamos la imagen oficial de Keyrock como base
+FROM fiware/idm:latest
+
+# 2. Copiamos tu archivo CSS (el que tiene el fondo de la UPB) 
+# Lo ponemos en la ruta donde Keyrock busca sus estilos
+COPY ./theme/style.css /opt/fiware-idm/public/stylesheets/style.css
+
+# 3. Copiamos tu archivo HTML/EJS (el que tiene el formulario)
+# Lo ponemos en la ruta de la vista de login
+COPY ./theme/login.ejs /opt/fiware-idm/views/auth/login.ejs
+
+# (Opcional) Si tienes imágenes locales, descomenta la siguiente línea:
+# COPY ./theme/logo.png /opt/fiware-idm/public/img/logo.png
