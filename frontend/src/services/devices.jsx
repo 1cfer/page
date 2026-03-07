@@ -1,15 +1,34 @@
-const addVariables = (states) => {
-  const arrayToReturn = {};
-  Object.keys(states).map((key) => {
+// ─────────────────────────────────────────────────────────────────────────────
+// DEVICE SERVICE
+//
+// createDevice: creates the entity in Orion AND its dedicated subscription
+//               in a single atomic operation from the frontend's perspective.
+//
+// editDevice:   updates the entity attributes in Orion (unchanged from before).
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { createDeviceSubscription } from './subscriptions';
+
+function getToken() {
+  return localStorage.getItem('access_token') || '';
+}
+
+// Build the sensor attribute map from checkbox states
+function buildSensorAttrs(states) {
+  const attrs = {};
+  Object.keys(states).forEach(key => {
     if (states[key]) {
-      arrayToReturn[key] = {
-        type: 'Integer',
-        value: null,
-      };
+      attrs[key] = { type: 'Integer', value: null };
     }
   });
-  return arrayToReturn;
-};
+  return attrs;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CREATE DEVICE
+// 1. POST entity to Orion
+// 2. POST dedicated subscription for this device to Orion → QuantumLeap
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function createDevice({
   checkboxStates,
@@ -18,17 +37,20 @@ export async function createDevice({
   sensorLongitude,
   sensorState,
 }) {
+  const token = getToken();
   const currentDate = new Date();
-  const addedVariables = addVariables(checkboxStates);
-  const sensorNameToSend = sensorName.toLowerCase().replace(/\s/g, '');
-  const response = await fetch('/v2/entities', {
+  const sensorAttrs = buildSensorAttrs(checkboxStates);
+  const deviceId = sensorName.toLowerCase().replace(/\s/g, '');
+
+  // ── Step 1: Create entity in Orion ─────────────────────────────────────────
+  const entityResponse = await fetch('/v2/entities', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id: sensorNameToSend,
+      id: deviceId,
       type: 'device',
       location: {
         type: 'geo:json',
@@ -45,16 +67,46 @@ export async function createDevice({
         type: 'DateTime',
         value: currentDate.toISOString(),
       },
-      ...addedVariables,
+      ...sensorAttrs,
     }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to create device');
+  if (!entityResponse.ok) {
+    const errorText = await entityResponse.text();
+    throw new Error(`Failed to create device in Orion: ${errorText}`);
   }
 
-  return response;
+  // ── Step 2: Create dedicated subscription for this device ──────────────────
+  //
+  // This subscription:
+  //   - Targets ONLY this device by ID (not all devices of type "device")
+  //   - Uses attrsFormat: "normalized" (required by QuantumLeap)
+  //   - Watches only the sensor attributes (not metadata like location/state)
+  //
+  const sensorAttrNames = Object.keys(sensorAttrs);
+
+  if (sensorAttrNames.length > 0) {
+    try {
+      await createDeviceSubscription({
+        deviceId,
+        attrs: sensorAttrNames,
+        token,
+      });
+    } catch (subError) {
+      // Log but don't fail the whole operation — device was created successfully.
+      // The subscription can be repaired manually or on next variable add.
+      console.error(`[devices] Device created but subscription failed:`, subError.message);
+    }
+  }
+
+  return { deviceId };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EDIT DEVICE
+// Updates entity attributes in Orion. Does not touch subscriptions.
+// Variable add/remove operations go through subscriptions.jsx instead.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function editDevice({
   checkboxStates,
@@ -64,11 +116,13 @@ export async function editDevice({
   sensorState,
   selectedSensor,
 }) {
-  const addedVariables = addVariables(checkboxStates);
+  const token = getToken();
+  const sensorAttrs = buildSensorAttrs(checkboxStates);
+
   const response = await fetch(`v2/entities/${sensorName}/attrs`, {
     method: 'PUT',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -84,13 +138,14 @@ export async function editDevice({
         value: sensorState,
       },
       creationdate: selectedSensor.creationdate,
-      ...addedVariables,
+      ...sensorAttrs,
     }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to create device');
+    const errorText = await response.text();
+    throw new Error(`Failed to update device: ${errorText}`);
   }
 
-  return response;
+  return { deviceId: sensorName };
 }

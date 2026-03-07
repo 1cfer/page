@@ -296,3 +296,391 @@
   .dateCell, .actionsCell { display: none; }
   .variablesGrid { grid-template-columns: 1fr 1fr; }
 }
+/* ════════════════════════════════════════════════════════════════
+   DeviceRow.module.css
+   ⚠️  .mainRow grid-template-columns DEBE ser IDÉNTICO a
+       .headerRow en Admin.module.css:
+       32px | 140px | 1fr | 120px | 120px | 180px | 72px
+   ════════════════════════════════════════════════════════════════ */
+
+/* ─── Card container ─────────────────────────────────────────── */
+.card {
+  background: #ffffff;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 14px;
+  margin-bottom: 6px;
+  overflow: visible;
+  transition:
+    border-color 200ms ease,
+    box-shadow   200ms ease,
+    transform    260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cardEnter 320ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+.card:hover {
+  border-color: #bbf7d0;
+  box-shadow: 0 4px 18px rgba(34, 197, 94, 0.09);
+  transform: translateY(-1px);
+}
+
+.cardOpen {
+  border-color: #22c55e !important;
+  box-shadow: 0 6px 28px rgba(34, 197, 94, 0.13) !important;
+  overflow: visible;
+}
+
+/* ─── Main Row ───────────────────────────────────────────────── */
+.mainRow {
+  display: grid;
+  grid-template-columns: 32px 140px 1fr 120px 120px 180px 72px;
+  gap: 0 14px;
+  padding: 12px 20px;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 12px;
+  transition: background 130ms ease;
+  min-height: 60px;
+}
+
+.mainRow:hover { background: #f7fef9; }
+
+/* ─── Chevron ────────────────────────────────────────────────── */
+.chevron {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #22c55e;
+  flex-shrink: 0;
+  transition:
+    transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 160ms ease;
+}
+.chevron svg { width: 11px; height: 11px; }
+.chevronOpen { transform: rotate(180deg); background: #dcfce7; }
+
+/* ─── Device Info ────────────────────────────────────────────── */
+.deviceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.deviceName {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.deviceType {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9.5px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── Coordinate Chips ───────────────────────────────────────── */
+.coordChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  width: 100%;
+  gap: 2px;
+  transition:
+    border-color 160ms ease,
+    background   160ms ease;
+}
+
+.mainRow:hover .coordChip {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.coordLabel {
+  font-family: 'DM Mono', monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #22c55e;
+  text-transform: uppercase;
+}
+
+.coordValue {
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ─── Date Cell ──────────────────────────────────────────────── */
+.dateCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.dateIcon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: #cbd5e1;
+}
+
+/* ─── Actions Cell ───────────────────────────────────────────── */
+.actionsCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Variables Panel
+   ═══════════════════════════════════════════════════════════════ */
+.variablesPanel {
+  border-top: 1.5px dashed #d1fae5;
+  background: linear-gradient(170deg, #fafffe 0%, #f0fdf4 100%);
+  padding: 16px 20px 22px;
+  border-radius: 0 0 12px 12px;
+}
+
+/* ── Panel Header ── */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panelHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panelIcon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.panelTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #15803d;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.variablesCount {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 99px;
+  padding: 2px 10px;
+}
+
+.panelDeviceId {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #94a3b8;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 2px 9px;
+  letter-spacing: 0.03em;
+}
+
+/* ── Empty state ── */
+.noVars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 22px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  background: #f8fafc;
+  border: 1.5px dashed #e2e8f0;
+  border-radius: 12px;
+}
+
+/* ── Variables Grid ── */
+.variablesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+/* ─── Variable Card ──────────────────────────────────────────── */
+.varCard {
+  background: #ffffff;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 14px;
+  padding: 14px 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 180ms ease,
+    box-shadow   180ms ease,
+    transform    240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.varCard:hover {
+  border-color: #86efac;
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.11);
+  transform: translateY(-2px);
+}
+
+/* Icon wrapper */
+.varIconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1.5px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.varCard:hover .varIconWrap {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-color: #86efac;
+}
+
+.varIconEmoji {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Body */
+.varBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.varName {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9.5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.varValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.varValue {
+  font-family: 'DM Mono', monospace;
+  font-size: 21px;
+  font-weight: 500;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.varUnit {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: #4ade80;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* Progress bar */
+.varBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: #f0fdf4;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
+.varBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #86efac, #22c55e);
+  border-radius: 0 2px 2px 0;
+  transition: width 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 4px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .mainRow {
+    grid-template-columns: 32px 140px 1fr 100px 100px 160px;
+  }
+  .actionsCell { display: none; }
+}
+
+@media (max-width: 860px) {
+  .mainRow {
+    grid-template-columns: 32px 130px 1fr 90px 90px;
+  }
+  .dateCell, .actionsCell { display: none; }
+  .variablesGrid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .mainRow {
+    grid-template-columns: 28px 120px 1fr;
+    padding: 10px 14px;
+    gap: 0 10px;
+  }
+  .coordChip, .dateCell, .actionsCell { display: none; }
+  .variablesGrid { grid-template-columns: 1fr; }
+}
