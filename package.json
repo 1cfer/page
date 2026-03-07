@@ -1,0 +1,22 @@
+{
+  "name": "agevital",
+  "version": "1.0.0",
+  "description": "AgeVital app",
+  "main": "index.js",
+  "scripts": {
+    "backend:start": "cd ./backend && python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt && ./.venv/bin/flask --app app --debug run",
+    "docker:start": "cd ./infrastructure/local && docker compose up -d",
+    "docker:stop": "cd ./infrastructure/local && docker compose down -v",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/Grupo-Investigacion-Bioingenieria-UPB/agevital.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Grupo-Investigacion-Bioingenieria-UPB/agevital/issues"
+  },
+  "homepage": "https://gitlab.com/Grupo-Investigacion-Bioingenieria-UPB/agevital#readme"
+}
