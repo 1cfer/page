@@ -1,73 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+/* ════════════════════════════════════════
+   CONTAINER
+════════════════════════════════════════ */
 .login-container {
-  position: relative;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-image: url('https://www.upb.edu.co/es/imagenes/img-upbsostenibleaerea-1464235639641.jpeg');
-  background-size: cover;
-  background-position: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  position: relative;
+  padding: 20px;
+  animation: fadeIn 400ms ease-in;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Back button */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+.back-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+}
+
+.back-button:active {
+  transform: scale(0.95);
+}
+
+.back-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ════════════════════════════════════════
+   LOGIN FORM WRAPPER
+════════════════════════════════════════ */
+.login-form-wrapper {
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ════════════════════════════════════════
+   LOGIN FORM
+════════════════��═══════════════════════ */
 .login-form {
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 30px;
+  background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
+  padding: 40px;
+  box-shadow:
+    0 4px 20px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(34, 197, 94, 0.10);
+}
+
+.login-header {
+  margin-bottom: 32px;
   text-align: center;
 }
 
-.login-form h2 {
-  margin-bottom: 20px;
-  font-size: 1.5em;
-  color: black;
+.login-header h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
 }
 
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
+.login-header p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
 }
 
-.form-group label {
-  font-weight: bold;
-  color: black;
-}
-
-.form-group input[type='text'],
-.form-group input[type='password'] {
-  width: 100%;
-  padding: 10px;
-  width: 280px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.login-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: #3fc244;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.back-button {
-  position: absolute;
-  top: 40px;
-  right: 40px;
-  background-color: #3fc244;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
+/* ════════════════════════════════════════
+   FORM
+════════════════════════════════════════ */
+form {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  scale: 1.5;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.info-box {
+  background: rgba(34, 197, 94, 0.05);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+}
+
+.info-box p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #334155;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ════════════════════════════════════════
+   SUBMIT BUTTON
+════════════════════════════════════════ */
+.submit-button {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 220ms ease,
+    background 160ms ease;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.28);
+  letter-spacing: -0.01em;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ════════════════════════════════════════
+   LOGIN FOOTER
+════════════════════════════════════════ */
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.forgot-password {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.forgot-password a {
+  color: #22c55e;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 200ms ease;
+}
+
+.forgot-password a:hover {
+  color: #16a34a;
+  text-decoration: underline;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .login-form {
+    padding: 32px 24px;
+  }
+
+  .login-header h1 {
+    font-size: 24px;
+  }
+
+  .login-form-wrapper {
+    max-width: 100%;
+  }
+
+  .back-button {
+    top: 12px;
+    left: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-form {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .login-header h1 {
+    font-size: 20px;
+  }
+
+  .login-header p {
+    font-size: 13px;
+  }
+
+  form {
+    gap: 14px;
+  }
+
+  .submit-button {
+    padding: 11px 20px;
+    font-size: 13px;
+  }
 }

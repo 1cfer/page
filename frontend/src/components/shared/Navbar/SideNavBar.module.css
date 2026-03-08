@@ -1,0 +1,46 @@
+/*
+ * SideNavBar.module.css
+ * Companion styles for SideNavBar.jsx
+ * All core styles live in the JSX via MUI sx props.
+ * Use this file for global overrides or app-specific tweaks.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── MUI Drawer paper override ─────────────────────────────────────────────── */
+/* Already handled via PaperProps sx in the component, but kept here as backup */
+.drawerPaper {
+  width: 272px;
+  background: rgba(255, 255, 255, 0.97) !important;
+  backdrop-filter: blur(24px) saturate(1.6);
+  border-right: 1px solid rgba(34, 197, 94, 0.10) !important;
+  box-shadow: 6px 0 48px rgba(0, 0, 0, 0.07), 2px 0 12px rgba(34, 197, 94, 0.05) !important;
+  overflow: hidden !important;
+}
+
+/* ── Scrollbar styling ─────────────────────────────────────────────────────── */
+.drawerPaper ::-webkit-scrollbar {
+  width: 4px;
+}
+.drawerPaper ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.drawerPaper ::-webkit-scrollbar-thumb {
+  background: rgba(34, 197, 94, 0.20);
+  border-radius: 99px;
+}
+.drawerPaper ::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 197, 94, 0.35);
+}
+
+/* ── MUI ripple color override ─────────────────────────────────────────────── */
+/* Makes the MUI ripple effect use green instead of the default grey */
+:global(.MuiListItemButton-root .MuiTouchRipple-child) {
+  background-color: rgba(34, 197, 94, 0.18) !important;
+}
+
+/* ── Utility: ensure DM fonts load ─────────────────────────────────────────── */
+/*
+  If not already imported globally, add this to your index.css or App.css:
+
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500;700&display=swap');
+*/

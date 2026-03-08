@@ -413,7 +413,7 @@ function Sparkline({ data, color }) {
 // PROJECT SELECTOR
 // ─────────────────────────────────────────────────────────────────────────────
 
-function ProjectSelector({ projects, activeProject, onSelect, onManage }) {
+function ProjectSelector({ projects, activeProject, onSelect, onManage, isAdmin }) {
   return (
     <div className="db-project-selector">
       {projects.map(p => {
@@ -434,10 +434,10 @@ function ProjectSelector({ projects, activeProject, onSelect, onManage }) {
           </button>
         );
       })}
-      <button onClick={onManage} className="db-project-add-btn" title="Agregar proyecto">
+      {isAdmin && <button onClick={onManage} className="db-project-add-btn" title="Agregar proyecto">
         <span className="db-project-add-icon">+</span>
         <span className="db-project-add-label">Agregar proyecto</span>
-      </button>
+      </button>}
     </div>
   );
 }
@@ -637,6 +637,9 @@ function ExpandModal({ attr, color, mode, rangeKey, prefetchedData, prefetchedSt
 export default function Dashboard() {
   const { icons } = useDeviceStore();
 
+  // ── Role check — same pattern as DeviceRow.jsx ─────────────────────────────
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
+
   const [devices,        setDevices]        = useState([]);
   const [pickedDevice,   setPickedDevice]   = useState('');
   const [deviceData,     setDeviceData]     = useState(null);
@@ -822,16 +825,18 @@ export default function Dashboard() {
         style={{ '--proj-color': proj.color, '--proj-dim': proj.colorDim, '--proj-border': proj.colorBorder }}
       >
         <div className="db-project-bar">
-          <ProjectSelector projects={projects} activeProject={activeProject} onSelect={setActiveProject} onManage={() => setShowProjMgr(true)} />
+          <ProjectSelector projects={projects} activeProject={activeProject} onSelect={setActiveProject} onManage={() => setShowProjMgr(true)} isAdmin={isAdmin} />
           <div className="db-project-bar-right">
-            {unassignedCount > 0 && (
+            {isAdmin && unassignedCount > 0 && (
               <button className="db-unassigned-badge" onClick={() => setShowAssignMgr(true)}>
                 ⚠️ {unassignedCount} sin asignar
               </button>
             )}
-            <button className="db-assign-mgr-btn" onClick={() => setShowAssignMgr(true)}>
-              🗂️ <span>Proyectos</span>
-            </button>
+            {isAdmin && (
+              <button className="db-assign-mgr-btn" onClick={() => setShowAssignMgr(true)}>
+                🗂️ <span>Proyectos</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -903,10 +908,12 @@ export default function Dashboard() {
                 }
               </select>
             </div>
-            {/* ── Botón que abre el mismo modal de variables que /devices ── */}
-            <button className="db-icon-mgr-btn" onClick={() => setShowVarMgr(true)}>
-              <span>📋</span><span>Variables</span>
-            </button>
+            {/* ── Variables button — admin only ── */}
+            {isAdmin && (
+              <button className="db-icon-mgr-btn" onClick={() => setShowVarMgr(true)}>
+                <span>📋</span><span>Variables</span>
+              </button>
+            )}
             <button
               className={`db-polling-btn ${polling ? 'db-polling-btn--on' : ''}`}
               style={polling ? { color: proj.color, background: proj.colorDim, borderColor: proj.colorBorder } : {}}
@@ -926,9 +933,11 @@ export default function Dashboard() {
             <div className="db-empty-icon" style={{ fontSize: 48 }}>{proj.emoji}</div>
             <p className="db-empty-title">No hay dispositivos en {proj.label}</p>
             <p className="db-empty-hint">Asigna dispositivos a este proyecto desde el gestor de proyectos.</p>
-            <button className="db-empty-retry" style={{ color: proj.color, background: proj.colorDim, borderColor: proj.colorBorder }} onClick={() => setShowAssignMgr(true)}>
-              🗂️ Asignar dispositivos
-            </button>
+            {isAdmin && (
+              <button className="db-empty-retry" style={{ color: proj.color, background: proj.colorDim, borderColor: proj.colorBorder }} onClick={() => setShowAssignMgr(true)}>
+                🗂️ Asignar dispositivos
+              </button>
+            )}
           </div>
         )}
 
@@ -1010,8 +1019,8 @@ export default function Dashboard() {
           prefetchedData={expanded.data} prefetchedStats={expanded.stats} icons={icons} onClose={() => setExpanded(null)} />
       )}
 
-      {/* ── Modal de variables — mismo que en /devices ── */}
-      {showVarMgr && (
+      {/* ── Modal de variables — admin only ── */}
+      {isAdmin && showVarMgr && (
         <VariableModal
           open={showVarMgr}
           setOpen={setShowVarMgr}
@@ -1020,11 +1029,11 @@ export default function Dashboard() {
         />
       )}
 
-      {showProjMgr && (
+      {isAdmin && showProjMgr && (
         <ProjectManagerModal projects={projects} onSave={handleProjectsSave} onClose={() => setShowProjMgr(false)} />
       )}
 
-      {showAssignMgr && (
+      {isAdmin && showAssignMgr && (
         <DeviceAssignModal devices={devices} projects={projects} projectMap={projectMap} onSave={handleAssignSave} onClose={() => setShowAssignMgr(false)} />
       )}
     </>
